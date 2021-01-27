@@ -10,11 +10,10 @@
 
 glfw glad freetype cstructures
 
-* 在linux你需要先运行
-
-  ```bash
+在linux你需要先运行
+```bash
 sudo apt install cmake xorg-dev libglu1-mesa-dev build-essential libgl1-mesa-dev
-  ```
+```
 #### Compile
 ##### Compile Library
 
