@@ -59,6 +59,64 @@ freetype已经支持cmake
 
 #### Tutorial
 
+##### 抽象层
+
+* 库的概念
+
+一个窗口对应一个“世界”，用户利用c语言描述“世界”，然后调用解释器解释。(库还不够解释多个“世界”，也就是多个窗口，以后会支持)。
+
+一个世界有多个“物种”，每个物种有多个“个体”。
+
+用户可以自己在"世界"注册新的”物种“，然后就可以创建该“物种”的个体了，当然你需要在解释器中增加对其的解释。比如你可以注册自己的”灯光物种“，然后在解释器中添加自己的解释代码。（正如上面介绍的，创建物种仅仅依赖c语言，而解释器部分则自己决定）
+
+目前该库默认注册的”物种“有：
+
+
+* 物种
+
+| 物种名       | 对应的结构体名 |对应的事物|
+| ------------ | -------------- |-----------|
+| Points       | Viewer_Points | 点集 |
+| Edges        | Viewer_Edges | 线段集合 |
+| Faces        | Viewer_Faces | 任意多边形集合 |
+| Intera       | Viewer_Intera | 交互器(包含各种鼠标 ，键盘时间等回调函数  ) |
+| Camera       | Viewer_Camera | 相机 |
+| Texture      | Viewer_Texture | 纹理 |
+| UI_Mesh      | Viewer_UI_Mesh | UI的网格 |
+| Cursor_Shape | Viewer_Cursor_Shape | 鼠标形状 |
+| Texts        | Viewer_Texts | 文字 |
+
+
+
+
+
+* c语言的4阶矩阵
+
+此库中的四阶矩阵利用宏实现了c++的模板功能，假如你要获得适配double类型的Viewer_Matrix4x4,你需要在头文件加入viewer_Matrix4x4_func_declare(double)，那么就会展开相关的函数声明，然后再在源文件中加入一句viewer_Matrix4x4_func(double)，那么就会展开相关函数的定义。之后对矩阵调用Matrix4x4_init_double()初始化，就可以使用了。
+
+| 内部函数                                        | 意义                                                         |
+| ----------------------------------------------- | ------------------------------------------------------------ |
+| void (*transpose)( Matrix4x4 \*)                | 对矩阵进行转置                                               |
+| Matrix4x4\*(mult)(Matrix4x4\*A,Matrix4x4\* B)   | 返回AB,返回的结果不用时，调用Matrix4x4_free进行内存销毁      |
+| Matrix4x4 \*(\*inverse)(Matrix4x4 \*);          | 返回$$A^-$$,当A退化时，返回NULL,当结果矩阵不使用时，调用Matrix4x4_free进行内存销毁 |
+| void (\*identity)(Matrix4x4 \*);                | 初始化当前矩阵为单位阵                                       |
+| void (\*zero)(Matrix4x4\*)                      | 初始化当前矩阵为0矩阵                                        |
+| void \*(\*det)(Matrix4x4 \*);                   | 返回当前矩阵的行列式，值是void\*(根据实际情况转化其为相应的数值) |
+| void (\*copy_data)(Matrix4x4\*A, Matrix4x4\*B); | 将B的值赋给A                                                 |
+| void \* data                                    | 矩阵的元素值，是一个储存16数值的数组                         |
+| void (\*print_self)(Matrix4x4 \*);              | 打印矩阵数值                                                 |
+
+
+
+##### 解释器层
+
+* 本库的默认解释器
+
+本库的默认解释器是基于opengl,
+
+##### demo
+
+
 
 
 
