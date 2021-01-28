@@ -54,7 +54,7 @@ Node* Viewer_World_find_species(Viewer_World*mw,char* c)
 {
 	if(c==NULL||c[0]=='\0')
 	{
-		return 0;
+		return NULL;
 	}
 	//int num=0;
 	Node * re=NULL;
@@ -89,7 +89,7 @@ Node* Viewer_World_find_species(Viewer_World*mw,char* c)
 			}
 		}
 		free(it);
-		re=node_overlying(re,(void*)id);
+		re=node_pushback(re,(void*)id);
 		
         	free(temp_c);
 		if(c[j]=='\0')
@@ -107,8 +107,8 @@ Node* Viewer_World_find_species(Viewer_World*mw,char* c)
 
 Node* Viewer_World_registe(Viewer_World*m,char*c)
 {
-	if(c==0||c[0]=='\0')
-	{return 0;}
+	if(c==NULL||c[0]=='\0')
+	{return NULL;}
 	Node* re=0;
 	int i=0,j=0;
 	while(c[i]!='\0')
@@ -152,7 +152,7 @@ Node* Viewer_World_registe(Viewer_World*m,char*c)
 			m->species2somethings->insert(m->species2somethings,&rbt);
 			int *temp_id=(int*)malloc(sizeof(int));
 			*temp_id=species_id;
-			re=node_overlying(re,(void*)temp_id);
+			re=node_pushback(re,(void*)temp_id);
 			free(id->value);
 		}
 		free_node(id);
@@ -268,7 +268,7 @@ Node* Viewer_World_from_something_evolute(Node*lis,struct Viewer_World* mw)
 
 
 		ms->evolution=value;
-		re=node_overlying(re,value);
+		re=node_pushback(re,value);
 		iter=(Node*)(iter->Next);
 	}
 	return node_reverse(re);
@@ -277,8 +277,8 @@ Node* Viewer_World_create_something(struct Viewer_World*mw,char *c)
 {
 	Node* id_list=Viewer_World_registe(mw,c),*re=0;
 	Node* iter_n=id_list;
-	if(id_list==0)
-	{return 0;}
+	if(id_list==NULL)
+	{return NULL;}
 	int i=0,j=0;
 	while(c[i]!='\0')
 	{
@@ -311,23 +311,24 @@ Node* Viewer_World_create_something(struct Viewer_World*mw,char *c)
          rbt.key=ms->id;rbt.value=(void*)(ms);
          RB_Tree* tree1=(RB_Tree*)(rbt1->value);
          tree1->insert(tree1,&rbt);
-		re=node_overlying(re,(void*)ms);
+		re=node_pushback(re,(void*)ms);
 		if(c[j]=='\0')
 		{
 			break;
 		}
-		iter_n=(Node*)(iter_n->Prev);
+		iter_n=(Node*)(iter_n->Next);
 		
 		i=j+1;
 		j=j+1;
 	}
 
-    id_list=node_reverse(id_list);
+    
 	free_node(id_list);
-	Node* temp_node=Viewer_World_from_something_evolute(re,mw);
+	
 
     re=node_reverse(re);
-	free_node(node_reverse(temp_node));
+    Node* temp_node=Viewer_World_from_something_evolute(re,mw);
+	free_node(temp_node);
 	return re;
 }
 

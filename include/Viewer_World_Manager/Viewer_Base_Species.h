@@ -72,16 +72,15 @@ void Viewer_Faces_random_color(Viewer_Faces*);
 void Viewer_Faces_init(Viewer_Faces*);
 typedef struct Viewer_Camera
 {
-
+/*this matrix represent the rotation of camera(camera lens)and location*/
+	/*the three order matrix of this matrix should be Unitary matrix*/
 	Matrix4x4* matrix;
-
-
-	
+	/*this matrix is to accelerate computing*/
 	Matrix4x4* matrix_inverse;
 	Matrix4x4* Proj;
 	//void (*set_using)(struct Viewer_world*,struct Viewer_Camera* c);
 	int is_using;
-
+/**/
 	float focal_distance;
 	void* prop;
 

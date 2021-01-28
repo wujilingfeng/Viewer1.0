@@ -346,7 +346,7 @@ void Viewer_Texts_init(struct Viewer_Texts*vtext )
     vtext->VAO=0;vtext->VBO[0]=0;vtext->VBO[1]=0;vtext->VBO[2]=0;
     vtext->prop=NULL;vtext->prop1=NULL;
 }
-/*特殊的初始化函数*/
+/*special function*/
 void Viewer_Texts_initn(struct Viewer_Texts* vtext,char const *str,float x,float y,float s,float* c,char const *font_path)
 {
     //Viewer_Texts_init(vtext);

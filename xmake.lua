@@ -1,10 +1,12 @@
 add_rules("mode.debug","mode.release")
+
 option("configure")
-    set_default(false)
+    set_default(true)
     set_showmenu(true)
 option("demo")
     set_default(true)
     set_showmenu(true)
+
 if has_config("configure") 
 then
     target("configure1")
@@ -24,40 +26,26 @@ then
             set_kind("binary")
             add_files("Demo/*.cpp","Demo/*.c")
             add_includedirs("include","Demo/include","thirdpart/cstructures/include","thirdpart/glad/include","thirdpart/glfw/include","thirdpart/freetype/include")
-            add_links("cstructures","glfw3","opengl32","freetype","viewer","gdi32","comdlg32","advapi32","Z")
+            if is_plat("windows") then
+                add_links("cstructures","glfw3","opengl32","freetype","viewer","gdi32","comdlg32","advapi32","Z")
+            end
+            if is_plat("linux") then
+                add_links("cstructures","glfw3", "GL", "Xrandr", "Xi", "X11", "Xxf86vm", "pthread", "Xinerama", "Xcursor", "dl", "freetype", "png", "z", "harfbuzz")
+            end
             add_linkdirs("lib","temp_libs")
             add_ldflags("-no-pie -Wl,--start-group ") 
     end
 end
 
-
--- if not has_config("kind") then
---     target("viewer_matrix4x4")
---         set_kind("static")
---         set_targetdir("temp_libs")
---         add_files("src/Math/*.c")
---         add_includedirs("include")
--- end
--- if not has_config("kind") then
-
-
---     target("main")
---         add_deps("viewer")
---         set_targetdir("bin")
---         set_kind("binary")
---         add_files("Demo/*.cpp","Demo/*.c")
---         add_includedirs("include","Demo/include","thirdpart/cstructures/include","thirdpart/glad/include","thirdpart/glfw/include","thirdpart/freetype/include")
---         add_links("cstructures","glfw3","opengl32","freetype","viewer","gdi32","comdlg32","advapi32","Z")
---         add_linkdirs("lib","temp_libs")
---         add_ldflags("-no-pie -Wl,--start-group ")
--- end
-
+-- target("viewer_matrix4x4")
+--     set_kind("static")
+--     set_targetdir("temp_libs")
+--     add_files("src/Math/*.c")
+--     add_includedirs("include")
+-- add_ldflags(-static-libstdc++ -static-libgcc)
+-- add_links(glfw3 Gl Xrandr Xi X11 Xxf86vm pthread Xinerama Xcursor m dl freetype png z harf buzz)
 -- target("main")
---     set_targetdir("bin")
 --     set_kind("binary")
 --     add_files("Demo/*.cpp","Demo/*.c")
---     add_includedirs("include","Demo/include","thirdpart/cstructures/include","thirdpart/glad/include","thirdpart/glfw/include","thirdpart/freetype/include")
---     add_links("cstructures","glfw3","opengl32","freetype","viewer","gdi32","comdlg32","advapi32","Z")
---     add_linkdirs("lib","temp_libs")
---     add_ldflags("-no-pie -Wl,--start-group ")
-    ---add_ldflags("-Wl,--start-group  -lglfw3 -lfreetype -lviewer -lcstructures -lZ -Wl,--end-group",{force=true}) 
+--     add_includedirs("include","Demo/include","thirdpart/cstructures/include","thirdpart/glad/include","thirdpart/glfw/include","thirdpart/freetype/incldue")
+
