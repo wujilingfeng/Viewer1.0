@@ -92,17 +92,17 @@ freetype已经支持cmake
 
 以下结构体Viewer_World的内部成员变量解释
 
-| 成员                                            | 含义                                                         |
-| ----------------------------------------------- | ------------------------------------------------------------ |
-| Node\* (\*find_species)( Viewer_World\*,char\*) | 查找物种，并按顺序返回当前物种的id。如果返回NULL,表示字符串不合适。id=-1表示没有此物种。例如find_speces(&vw,"Points,Faces")会返回链表，这个链表按顺序储存id变量 |
-| Node\*(\*registe)(Viewer_World\*,char\*);       | 注册物种，如果返回NULL,表示字符串不合适。按顺序返回物种id    |
-|                                                 |                                                              |
-|                                                 |                                                              |
-|                                                 |                                                              |
-|                                                 |                                                              |
-|                                                 |                                                              |
-|                                                 |                                                              |
-|                                                 |                                                              |
+| 成员                                              | 含义                                                         |
+| ------------------------------------------------- | ------------------------------------------------------------ |
+| Node\* (\*find_species)( Viewer_World\*,char\*)   | 查找物种，并按顺序返回当前物种的id。如果返回NULL,表示字符串不合适。id=-1表示没有此物种。例如find_speces(&vw,"Points,Faces")会返回链表，这个链表按顺序储存id变量 |
+| Node\*(\*registe)(Viewer_World\*,char\*);         | 注册物种，如果返回NULL,表示字符串不合适。按顺序返回物种id    |
+| Node\*(\*create_something)(Viewer_World\*,char\*) | 创建个体，按顺序返回物种                                     |
+| g_info                                            | 储存了当前所有交互信息，比如鼠标和键盘状态，拖拽的文件路径，拾取信息 |
+|                                                   |                                                              |
+|                                                   |                                                              |
+|                                                   |                                                              |
+|                                                   |                                                              |
+|                                                   |                                                              |
 
 
 
@@ -278,7 +278,7 @@ voi.interpreter(&voi);//解释
 
 
 
-接下来我们想要在”世界“vw"里描述一些东西，比如点集:
+接下来我们想要在”世界“vw里描述一些东西，比如点集:
 
 ```c
 Node*n=vw.create_something(&vw,"Points");
@@ -287,7 +287,7 @@ Viewer_Points* vp=(Viewer_Something*)(vs->evolution);
 free_node(node_reverse(n));
 ```
 
-这样你将领取两个结构体，你修改vp结构体内的变量也就是描述点集的过程。
+这样你将领取一些结构体，你修改vp结构体内的变量也就是描述点集的过程。
 
 以上代码代码几乎是定式的。比如再描述一些线段:
 
@@ -302,11 +302,38 @@ free_node(node_reverse(n));
 
 ```c
 Node* n=vw.create_something(&vw,"Points,Edges");
-Viewer_Something* vs=(Viewer_Something*)(n->value);
+Node* nit=n;
+Viewer_Something* vs=(Viewer_Something*)(nit->value);
+Viewer_Points * vp=(Viewer_Points*)(vs->evolution);
+nit=(Node*)(nit->Next);
+vs=(Viewer_Something*)(nit->value);
+Viewer_Edges * ve=(Viewer_Edges*)(vs->evolution);
+```
+
+* 如何描述多边形集合
+
+在Viewer_Faces结构体内有这样几个变量Data_rows,Data_index_rows,Data,Data_index.
+
+Data_rows表示这些多边形有多少个点，Data_index表示有多少个多边形。
+
+Data的数组长度应该Data_rows*3,因为每个点有x,y,z三个分量，这些点的顺序决定了点的索引:0,1,2.....
+
+Data_index也是数组（长度视具体描述而定），它表示这些索引表示的多边形。它将按顺序读取数组，首先读取的数假设为x，那么x表示接下来的多边形有x个点，后面的x个数表示这些点的索引，这样就描述了一个多边形，然后再向后读取一个数y,那么接下来的多边形有y个点.........
+
+以下是一个例子
+
+```c
 
 ```
 
 
+
+
+
+#### 需要改进的地方
+
+* viewerport和拾取方面的配合
+* 似乎g_info需要读取多个离屏渲染的像素
 
 
 
