@@ -1,4 +1,9 @@
 {
+    files = {
+        "build/.objs/main/linux/x86_64/release/Demo/main.cpp.o",
+        "build/.objs/main/linux/x86_64/release/Demo/Arcroll.c.o",
+        "temp_libs/libviewer.a"
+    },
     values = {
         "/usr/bin/g++",
         {
@@ -25,10 +30,5 @@
             "-no-pie",
             "-Wl,--start-group"
         }
-    },
-    files = {
-        "build/.objs/main/linux/x86_64/release/Demo/main.cpp.o",
-        "build/.objs/main/linux/x86_64/release/Demo/Arcroll.c.o",
-        "temp_libs/libviewer.a"
     }
 }
