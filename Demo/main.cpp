@@ -495,7 +495,7 @@ void test2()
     vum->color_rows=vum->Data_rows;
     vum->Data=(float*)malloc(sizeof(float)*3*vum->Data_rows);
     vum->Data_index=(unsigned int*)malloc(sizeof(unsigned int)*4*vum->Data_index_rows);
-    vum->random_color(vum);
+    //vum->random_color(vum);
     vum->Data[0]=0.1;vum->Data[1]=-0.4;vum->Data[2]=-1;
     vum->Data[3]=0.4;vum->Data[4]=-0.4;vum->Data[5]=-1;
     vum->Data[6]=0.4;vum->Data[7]=-0.1;vum->Data[8]=-1;

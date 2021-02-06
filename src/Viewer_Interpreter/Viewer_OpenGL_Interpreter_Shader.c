@@ -1508,6 +1508,7 @@ void Viewer_load_ui_data(Viewer_Opengl_Interpreter_Shader_Program *voisp)
             glGenVertexArrays(1,&(vtext->VAO));
             glGenBuffers(4,vtext->VBO);
             glBindVertexArray(vtext->VAO);
+
             glBindBuffer(GL_ARRAY_BUFFER,vtext->VBO[0]);
             glBufferData(GL_ARRAY_BUFFER,sizeof(float)*6*3,NULL,GL_DYNAMIC_DRAW);
             glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),0);
@@ -1579,13 +1580,17 @@ void Viewer_load_ui_data(Viewer_Opengl_Interpreter_Shader_Program *voisp)
             {
                 continue;
             }
-            GLfloat *vertices=(GLfloat*)malloc(sizeof(GLfloat)*v_size*3);
-            GLfloat* colors=(GLfloat*)malloc(sizeof(GLfloat)*v_size*4);
+            if(vum->color==NULL&&vum->color_rows>0)
+            {
+                vum->random_color(vum);
+            }
+            //GLfloat *vertices=(GLfloat*)malloc(sizeof(GLfloat)*v_size*3);
+            //GLfloat* colors=(GLfloat*)malloc(sizeof(GLfloat)*v_size*4);
             GLfloat* texcoords=(GLfloat*)malloc(sizeof(GLfloat)*v_size*2);
             GLfloat* e_id=(GLfloat*)malloc(sizeof(GLfloat)*v_size);
             GLfloat* face_index_marked=(GLfloat*)malloc(sizeof(GLfloat)*v_size);
             memset(texcoords,0,sizeof(GLfloat)*v_size*2);
-            memset(colors,0,sizeof(GLfloat)*v_size*4);
+           // memset(colors,0,sizeof(GLfloat)*v_size*4);
             memset(e_id,0,sizeof(GLfloat)*v_size);
             memset(face_index_marked,0,sizeof(GLfloat)*v_size);
             temp_i=0;v_size=0;
@@ -1597,17 +1602,17 @@ void Viewer_load_ui_data(Viewer_Opengl_Interpreter_Shader_Program *voisp)
                     int k;
                     k=vum->Data_index[temp_i+1];
                     e_id[v_size]=elements_id;face_index_marked[v_size]=0;
-                    vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
+                   // vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
                     v_size++;
 
                     k=vum->Data_index[temp_i+1+l+1];
                     e_id[v_size]=elements_id;face_index_marked[v_size]=1;
-                    vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
+                    //vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
                     v_size++;
 
                     k=vum->Data_index[temp_i+1+l+2];
                     e_id[v_size]=elements_id;face_index_marked[v_size]=2;
-                    vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
+                   // vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
                     v_size++; 
 
                 }
@@ -1616,60 +1621,60 @@ void Viewer_load_ui_data(Viewer_Opengl_Interpreter_Shader_Program *voisp)
             }
 
             //color
-            if(vum->color!=0)
-            {
-                temp_i=0;v_size=0;
-                if(vum->color_rows==vum->Data_index_rows)
-                {
-                    for(unsigned int i=0;i<vum->Data_index_rows;i++)
-                    {
-                        int j=vum->Data_index[temp_i];
-                        for(int l=0;l<(j-2)*3;l++)
-                        { 
-                            for(int k=0;k<4;k++)
-                            {
-                                colors[v_size*4+k]=vum->color[i*4+k];
-                            }
-                            v_size++;
-                        }
-                        temp_i+=(j+1);                   
-                    } 
+            // if(vum->color!=0)
+            // {
+            //     temp_i=0;v_size=0;
+            //     if(vum->color_rows==vum->Data_index_rows)
+            //     {
+            //         for(unsigned int i=0;i<vum->Data_index_rows;i++)
+            //         {
+            //             int j=vum->Data_index[temp_i];
+            //             for(int l=0;l<(j-2)*3;l++)
+            //             { 
+            //                 for(int k=0;k<4;k++)
+            //                 {
+            //                     colors[v_size*4+k]=vum->color[i*4+k];
+            //                 }
+            //                 v_size++;
+            //             }
+            //             temp_i+=(j+1);                   
+            //         } 
    
-                }
-                else if(vum->color_rows==vum->Data_rows)
-                {
-                    for(unsigned int i=0;i<vum->Data_index_rows;i++)
-                    {
-                        int j=vum->Data_index[temp_i];
-                        for(int l=0;l<(j-2);l++)
-                        {
+            //     }
+            //     else if(vum->color_rows==vum->Data_rows)
+            //     {
+            //         for(unsigned int i=0;i<vum->Data_index_rows;i++)
+            //         {
+            //             int j=vum->Data_index[temp_i];
+            //             for(int l=0;l<(j-2);l++)
+            //             {
                     
-                            int temp_in=vum->Data_index[temp_i+1];
-                            for(int k=0;k<4;k++)
-                            {
-                                colors[v_size*4+k]=vum->color[temp_in*4+k];
-                            }
-                            v_size++;
-                            temp_in=vum->Data_index[temp_i+1+l+1];
-                            for(int k=0;k<4;k++)
-                            {
-                                colors[v_size*4+k]=vum->color[temp_in*4+k];
-                            }
+            //                 int temp_in=vum->Data_index[temp_i+1];
+            //                 for(int k=0;k<4;k++)
+            //                 {
+            //                     colors[v_size*4+k]=vum->color[temp_in*4+k];
+            //                 }
+            //                 v_size++;
+            //                 temp_in=vum->Data_index[temp_i+1+l+1];
+            //                 for(int k=0;k<4;k++)
+            //                 {
+            //                     colors[v_size*4+k]=vum->color[temp_in*4+k];
+            //                 }
 
-                            v_size++;
-                            temp_in=vum->Data_index[temp_i+1+l+2];
-                            for(int k=0;k<4;k++)
-                            {
-                                colors[v_size*4+k]=vum->color[temp_in*4+k];
-                            }
+            //                 v_size++;
+            //                 temp_in=vum->Data_index[temp_i+1+l+2];
+            //                 for(int k=0;k<4;k++)
+            //                 {
+            //                     colors[v_size*4+k]=vum->color[temp_in*4+k];
+            //                 }
 
-                            v_size++;
-                        }
-                        temp_i+=(j+1);                   
-                    } 
+            //                 v_size++;
+            //             }
+            //             temp_i+=(j+1);                   
+            //         } 
  
-                }
-            }
+            //     }
+            // }
 
             //texture
             if(vum->texture!=NULL)
@@ -1709,39 +1714,54 @@ void Viewer_load_ui_data(Viewer_Opengl_Interpreter_Shader_Program *voisp)
             glGenBuffers(5,vum->Buffers);
 
             glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*3,vertices,GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*4,colors,GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[2]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*2,texcoords,GL_STATIC_DRAW);
-            
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[3]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size,e_id,GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[4]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size,face_index_marked,GL_STATIC_DRAW);
-
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER,sizeof(float)*v_size*3,NULL,GL_DYNAMIC_DRAW);
+            //glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*3,vertices,GL_STATIC_DRAW);
+           // glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*3,NULL,GL_DYNAMIC_DRAW);
             glVertexAttribPointer( 0, 3, GL_FLOAT,GL_FALSE, 0, 0 );
             
             glEnableVertexAttribArray( 0 );
+            
+
             glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[1]);
+            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*4,NULL,GL_DYNAMIC_DRAW);
+            //glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*4,colors,GL_STATIC_DRAW);
             glVertexAttribPointer(1,4,GL_FLOAT,GL_FALSE,0,0);
             glEnableVertexAttribArray(1);
+            
 
             glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[2]);
+            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*2,texcoords,GL_STATIC_DRAW);
             glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,0,0);
             glEnableVertexAttribArray(2);
+            
+
             glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[3]);
+
+            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size,e_id,GL_STATIC_DRAW);
             glVertexAttribPointer(3,1,GL_FLOAT,GL_FALSE,0,0);
             glEnableVertexAttribArray(3);
+
+
             glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[4]);
+            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size,face_index_marked,GL_STATIC_DRAW);
             glVertexAttribPointer(4,1,GL_FLOAT,GL_FALSE,0,0);
             glEnableVertexAttribArray(4);
+            //glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[0]);
+            
+           // glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[1]);
+            
+
+            //glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[2]);
+            
+            //glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[3]);
+            
+            //glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[4]);
+            
             glBindBuffer(GL_ARRAY_BUFFER,0);
             glBindVertexArray(0);
  
-            free(vertices);
-            free(colors);
+            //free(vertices);
+           // free(colors);
             free(texcoords);
             free(e_id);
             free(face_index_marked); 
@@ -2033,183 +2053,8 @@ void Viewer_render_ui(Viewer_Opengl_Interpreter_Shader_Program*voisp)
                 if(vum->update==1)
                 {
                     /********
-                    v_size=0,temp_i=0;
-                    for(unsigned int i=0;i<vum->Data_index_rows;i++)
-                    {
-                        int j=vum->Data_index[temp_i];
-                        v_size+=(j-2)*3;
-                        temp_i+=(j+1); 
-                    }
-                    if(v_size==0)
-                    {
-                        continue;
-                    }
-                    GLfloat *vertices=(GLfloat*)malloc(sizeof(GLfloat)*v_size*3);
-                    GLfloat* colors=(GLfloat*)malloc(sizeof(GLfloat)*v_size*4);
-                    GLfloat* texcoords=(GLfloat*)malloc(sizeof(GLfloat)*v_size*2);
-                    GLfloat* e_id=(GLfloat*)malloc(sizeof(GLfloat)*v_size);
-                    GLfloat* face_index_marked=(GLfloat*)malloc(sizeof(GLfloat)*v_size);
-                    memset(texcoords,0,sizeof(GLfloat)*v_size*2);
-            memset(colors,0,sizeof(GLfloat)*v_size*4);
-            memset(e_id,0,sizeof(GLfloat)*v_size);
-            memset(face_index_marked,0,sizeof(GLfloat)*v_size);
-            temp_i=0;v_size=0;
-            for(unsigned int i=0;i<vum->Data_index_rows;i++)
-            {
-                int j=vum->Data_index[temp_i];
-                for(int l=0;l<(j-2);l++)
-                {
-                    int k;
-                    k=vum->Data_index[temp_i+1];
-                    e_id[v_size]=elements_id;face_index_marked[v_size]=0;
-                    vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
-                    v_size++;
+                 
 
-                    k=vum->Data_index[temp_i+1+l+1];
-                    e_id[v_size]=elements_id;face_index_marked[v_size]=1;
-                    vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
-                    v_size++;
-
-                    k=vum->Data_index[temp_i+1+l+2];
-                    e_id[v_size]=elements_id;face_index_marked[v_size]=2;
-                    vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
-                    v_size++; 
-
-                }
-                temp_i+=(j+1);            
-                elements_id++;
-            }
-
-            //color
-            if(vum->color!=0)
-            {
-                temp_i=0;v_size=0;
-                if(vum->color_rows==vum->Data_index_rows)
-                {
-                    for(unsigned int i=0;i<vum->Data_index_rows;i++)
-                    {
-                        int j=vum->Data_index[temp_i];
-                        for(int l=0;l<(j-2)*3;l++)
-                        { 
-                            for(int k=0;k<4;k++)
-                            {
-                                colors[v_size*4+k]=vum->color[i*4+k];
-                            }
-                            v_size++;
-                        }
-                        temp_i+=(j+1);                   
-                    } 
-   
-                }
-                else if(vum->color_rows==vum->Data_rows)
-                {
-                    for(unsigned int i=0;i<vum->Data_index_rows;i++)
-                    {
-                        int j=vum->Data_index[temp_i];
-                        for(int l=0;l<(j-2);l++)
-                        {
-                    
-                            int temp_in=vum->Data_index[temp_i+1];
-                            for(int k=0;k<4;k++)
-                            {
-                                colors[v_size*4+k]=vum->color[temp_in*4+k];
-                            }
-                            v_size++;
-                            temp_in=vum->Data_index[temp_i+1+l+1];
-                            for(int k=0;k<4;k++)
-                            {
-                                colors[v_size*4+k]=vum->color[temp_in*4+k];
-                            }
-
-                            v_size++;
-                            temp_in=vum->Data_index[temp_i+1+l+2];
-                            for(int k=0;k<4;k++)
-                            {
-                                colors[v_size*4+k]=vum->color[temp_in*4+k];
-                            }
-
-                            v_size++;
-                        }
-                        temp_i+=(j+1);                   
-                    } 
- 
-                }
-            }
-
-            //texture
-            if(vum->texture!=NULL)
-            {
-                //add_texture_to_shader(value_t,mf->texture->image_file); 
-                //moi->node=node_overlying(moi->node,(void*)value_t);
-                Viewer_Texture* vt=(Viewer_Texture*)(vum->texture->evolution);
-                if(vt->each_face_texture_coord!=0)
-                {
-                    temp_i=0;v_size=0;
-
-                    for(unsigned int i=0;i<vum->Data_index_rows;i++)
-                    {
-                        int j=vt->each_face_texture_coord[temp_i];
-                        for(int l=0;l<(j-2);l++)
-                        {
-                            texcoords[v_size*2+0]=vt->each_face_texture_coord[temp_i+1+0];
-                            texcoords[v_size*2+1]=vt->each_face_texture_coord[temp_i+1+1];
-                            v_size++;
-                            texcoords[v_size*2+0]=vt->each_face_texture_coord[temp_i+1+2*(l+1)+0];
-                            texcoords[v_size*2+1]=vt->each_face_texture_coord[temp_i+1+2*(l+1)+1];
-                            v_size++;
-                            texcoords[v_size*2+0]=vt->each_face_texture_coord[temp_i+1+2*(l+2)+0];
-                            texcoords[v_size*2+1]=vt->each_face_texture_coord[temp_i+1+2*(l+2)+1];
-                            v_size++;
-                        } 
-                        temp_i+=(j*2+1);                   
-                    }
-                }
-
-            }
-               
-            glDeleteBuffers(5,vum->Buffers);
-            glDeleteVertexArrays(1,&(vum->VAO));
-            glGenVertexArrays(1,&(vum->VAO));
-            glBindVertexArray(vum->VAO);
-            glGenBuffers(5,vum->Buffers);
-
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[0]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*3,vertices,GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[1]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*4,colors,GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[2]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size*2,texcoords,GL_STATIC_DRAW);
-            
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[3]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size,e_id,GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[4]);
-            glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*v_size,face_index_marked,GL_STATIC_DRAW);
-
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[0]);
-            glVertexAttribPointer( 0, 3, GL_FLOAT,GL_FALSE, 0, 0 );
-            
-            glEnableVertexAttribArray( 0 );
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[1]);
-            glVertexAttribPointer(1,4,GL_FLOAT,GL_FALSE,0,0);
-            glEnableVertexAttribArray(1);
-
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[2]);
-            glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,0,0);
-            glEnableVertexAttribArray(2);
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[3]);
-            glVertexAttribPointer(3,1,GL_FLOAT,GL_FALSE,0,0);
-            glEnableVertexAttribArray(3);
-            glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[4]);
-            glVertexAttribPointer(4,1,GL_FLOAT,GL_FALSE,0,0);
-            glEnableVertexAttribArray(4);
-            glBindBuffer(GL_ARRAY_BUFFER,0);
-            glBindVertexArray(0);
- 
-            free(vertices);
-            free(colors);
-            free(texcoords);
-            free(e_id);
-            free(face_index_marked); 
     
                     ********/
 
@@ -2231,6 +2076,10 @@ void Viewer_render_ui(Viewer_Opengl_Interpreter_Shader_Program*voisp)
                     v_size+=(j-2)*3;
                     temp_i+=(j+1);
                 }
+                if(v_size<=0)
+                {
+                    continue;
+                }
                 float *data=(float*)(vum->mat->data);
                 glUniformMatrix4fv(glGetUniformLocation(voisp->program,"Object_Matrix"),1,GL_TRUE,data);
                 data=(float*)(vum->Proj->data);
@@ -2242,9 +2091,97 @@ void Viewer_render_ui(Viewer_Opengl_Interpreter_Shader_Program*voisp)
                     glActiveTexture(GL_TEXTURE0);
                     glBindTexture(GL_TEXTURE_2D,((Viewer_Texture*)(vum->texture->evolution))->tex); 
                 }
+
+                GLfloat *vertices=(GLfloat*)malloc(sizeof(GLfloat)*v_size*3);
+                GLfloat* colors=(GLfloat*)malloc(sizeof(GLfloat)*v_size*4);
+                memset(vertices,0,sizeof(GLfloat)*v_size*3);
+                memset(colors,0,sizeof(GLfloat)*v_size*4);
+
+                temp_i=0;v_size=0;
+                for(unsigned int i=0;i<vum->Data_index_rows;i++)
+                {
+                    int j=vum->Data_index[temp_i];
+                    for(int l=0;l<(j-2);l++)
+                    {
+                        int k=0;
+                        k=vum->Data_index[temp_i+1];
+                        vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
+                        v_size++;
+                        k=vum->Data_index[temp_i+1+l+1];
+                        vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
+                        v_size++;
+                        k=vum->Data_index[temp_i+1+l+2];
+                        vertices[v_size*3+0]=vum->Data[k*3+0];vertices[v_size*3+1]=vum->Data[k*3+1];vertices[v_size*3+2]=vum->Data[k*3+2];
+                        v_size++; 
+                    }
+                    temp_i+=(j+1);
+                }
+
+
+
+                if(vum->color!=0)
+                {
+                    temp_i=0;v_size=0;
+                    if(vum->color_rows==vum->Data_index_rows)
+                    {
+                        for(unsigned int i=0;i<vum->Data_index_rows;i++)
+                        {
+                            int j=vum->Data_index[temp_i];
+                            for(int l=0;l<(j-2)*3;l++)
+                            { 
+                                for(int k=0;k<4;k++)
+                                {
+                                    colors[v_size*4+k]=vum->color[i*4+k];
+                                }
+                                v_size++;
+                            }
+                            temp_i+=(j+1);                   
+                        } 
+                    }
+                    else if(vum->color_rows==vum->Data_rows)
+                    {
+                        for(unsigned int i=0;i<vum->Data_index_rows;i++)
+                        {
+                            int j=vum->Data_index[temp_i];
+                            for(int l=0;l<(j-2);l++)
+                            {
+                    
+                                int temp_in=vum->Data_index[temp_i+1];
+                                for(int k=0;k<4;k++)
+                                {
+                                    colors[v_size*4+k]=vum->color[temp_in*4+k];
+                                }
+                                v_size++;
+                                temp_in=vum->Data_index[temp_i+1+l+1];
+                                for(int k=0;k<4;k++)
+                                {
+                                    colors[v_size*4+k]=vum->color[temp_in*4+k];
+                                }
+
+                                v_size++;
+                                temp_in=vum->Data_index[temp_i+1+l+2];
+                                for(int k=0;k<4;k++)
+                                {
+                                    colors[v_size*4+k]=vum->color[temp_in*4+k];
+                                }
+
+                                v_size++;
+                            }
+                            temp_i+=(j+1);                   
+                        } 
+                    }
+                }
+                
                 glBindVertexArray(vum->VAO);
+                glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[0]);
+                glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(GL_FLOAT)*v_size*3,vertices);
+                glBindBuffer(GL_ARRAY_BUFFER,vum->Buffers[1]);
+                glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(GL_FLOAT)*v_size*4,colors);
                 glDrawArrays(GL_TRIANGLES,0,v_size); 
-           
+
+                free(vertices);
+                free(colors);
+                glBindVertexArray(0); 
             //glDrawArraysInstanced
             }
             free(iter1);

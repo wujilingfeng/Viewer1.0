@@ -7,7 +7,7 @@
 #define _ReadFile_ OpenglAlg_ReadFile
 GLchar* _ReadFile_ (char* filename)
 {
-    printf("%s\n", filename );
+   /// printf("%s\n", filename );
 #ifdef WIN32
 	FILE* infile;
 	fopen_s(&infile,filename,"rb");
@@ -16,7 +16,7 @@ GLchar* _ReadFile_ (char* filename)
 #endif
   if(!infile)
   {
-  	printf("can't open this filehhh\r\n");
+  	printf("can't open this file\r\n");
   	return NULL;
   }
     fseek(infile,0,SEEK_END);
@@ -82,7 +82,7 @@ void _Shader_(ShaderInfo* shaders)
 		    printf("this file is blank\r\n");
 	    return;
 	    }
-	printf("%s\n",source);
+	//printf("%s\n",source);
 	    glShaderSource(shader,1,&source,NULL);
 	    free((GLchar *)source);
 	    glCompileShader(shader);
