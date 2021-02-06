@@ -52,7 +52,19 @@ xmake
 
 将freetype glfw cstructures编译好的lib库放到lib文件
 
-针对各种平台只需将上面`--demo=n`替换为`--demo=y`
+针对各种平台只需将上面`--demo=n`替换为`--demo=y`,再加入`--demo_path=`选项。
+
+for linux
+
+```bash
+xmake f --configure=y --demo=y --demo_path=Demo
+xmake
+```
+
+
+
+
+
 ##### complier freetype
 
 freetype已经支持cmake
@@ -79,7 +91,7 @@ freetype已经支持cmake
 | Points       | Viewer_Points | 点集 |
 | Edges        | Viewer_Edges | 线段集合 |
 | Faces        | Viewer_Faces | 任意多边形集合 |
-| Intera       | Viewer_Intera | 交互器(包含各种鼠标 ，键盘，拖拽,时间等回调函数  ) |
+| Intera       | Viewer_Intera | 交互器(包含各种鼠标 ，键盘，拖拽,时间,拾取等回调函数  ) |
 | Camera       | Viewer_Camera | 相机 |
 | Texture      | Viewer_Texture | 纹理 |
 | UI_Mesh      | Viewer_UI_Mesh | UI的网格 |
@@ -278,7 +290,19 @@ voi.interpreter(&voi);//解释
 
 
 
-接下来我们想要在”世界“vw里描述一些东西，比如点集:
+接下来我们想要在”世界“vw里描述一些东西，比如点集。
+
+但是在描述点集前，你需要先描述一个相机（人眼），因为只有相机（人眼）才能成像。最后的画面均是来自此相机(人眼)的画面。
+
+（你可以创建多个相机，并设置其中一个可用）
+
+```c
+
+```
+
+
+
+现在描述点集：
 
 ```c
 Node*n=vw.create_something(&vw,"Points");
@@ -334,6 +358,7 @@ Data_index也是数组（长度视具体描述而定），它表示这些索引�
 
 * viewerport和拾取方面的配合
 * 似乎g_info需要读取多个离屏渲染的像素
+* UI_Mesh点的位置需要动态，颜色需要动态
 
 
 

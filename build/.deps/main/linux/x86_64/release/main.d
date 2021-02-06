@@ -1,0 +1,34 @@
+{
+    files = {
+        "build/.objs/main/linux/x86_64/release/Demo/main.cpp.o",
+        "build/.objs/main/linux/x86_64/release/Demo/Arcroll.c.o",
+        "temp_libs/libviewer.a"
+    },
+    values = {
+        "/usr/bin/g++",
+        {
+            "-m64",
+            "-Ltemp_libs",
+            "-Llib",
+            "-s",
+            "-lviewer",
+            "-lcstructures",
+            "-lglfw3",
+            "-lGL",
+            "-lXrandr",
+            "-lXi",
+            "-lX11",
+            "-lXxf86vm",
+            "-lpthread",
+            "-lXinerama",
+            "-lXcursor",
+            "-ldl",
+            "-lfreetype",
+            "-lpng",
+            "-lz",
+            "-lharfbuzz",
+            "-no-pie",
+            "-Wl,--start-group"
+        }
+    }
+}

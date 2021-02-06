@@ -6,6 +6,11 @@ option("configure")
 option("demo")
     set_default(true)
     set_showmenu(true)
+option("demo_path")
+    set_showmenu(true)
+
+
+
 
 if has_config("configure") 
 then
@@ -24,8 +29,8 @@ then
             add_deps("viewer")
             set_targetdir("bin")
             set_kind("binary")
-            add_files("Demo/*.cpp","Demo/*.c")
-            add_includedirs("include","Demo/include","thirdpart/cstructures/include","thirdpart/glad/include","thirdpart/glfw/include","thirdpart/freetype/include")
+            add_files("$(demo_path)/*.cpp","$(demo_path)/*.c")
+            add_includedirs("include","$(demo_path)/include","thirdpart/cstructures/include","thirdpart/glad/include","thirdpart/glfw/include","thirdpart/freetype/include")
             if is_plat("windows") then
                 add_links("cstructures","glfw3","opengl32","freetype","viewer","gdi32","comdlg32","advapi32","Z")
             end
