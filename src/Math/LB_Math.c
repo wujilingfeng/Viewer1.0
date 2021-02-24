@@ -91,6 +91,7 @@ static int increase_a_step_for_combination(int m,int n,int* temp_array)
             		{
                 		mu_array[j]=j;
             		}
+/*Execute once and return*/
             		return 1;
 
         	}
