@@ -30,9 +30,11 @@ then
             set_targetdir("bin")
             set_kind("binary")
             add_files("$(demo_path)/*.cpp","$(demo_path)/*.c")
+            ---print("fdsfsdfd")
             add_includedirs("include","$(demo_path)/include","thirdpart/cstructures/include","thirdpart/glad/include","thirdpart/glfw/include","thirdpart/freetype/include")
-            if is_plat("windows") then
-                add_links("cstructures","glfw3","opengl32","freetype","viewer","gdi32","comdlg32","advapi32","Z")
+            if is_plat("windows","mingw") then
+                print("windwos")
+                add_links("cstructures","glfw3","opengl32","freetype","viewer","gdi32","comdlg32","advapi32","Z","glfw3","cstructures")
             end
             if is_plat("linux") then
                 add_links("cstructures","glfw3", "GL", "Xrandr", "Xi", "X11", "Xxf86vm", "pthread", "Xinerama", "Xcursor", "dl", "freetype", "png", "z", "harfbuzz")
