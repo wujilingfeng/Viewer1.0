@@ -14,11 +14,19 @@ void viewer_mouse_button_callback(GLFWwindow* window,int button,int action,int m
 void viewer_framebuffer_size_callback(GLFWwindow* window,int w,int h);
 void viewer_key_callback(GLFWwindow* ,int,int,int,int );
 void viewer_scroll_callback(GLFWwindow* window,double x,double y);
-void viewer_set_callback(GLFWwindow* window);
+
 /* warting for accomplished*/
 void viewer_animation(Viewer_World*);
 /*drag */
 void viewer_drop_callback(GLFWwindow* window,int count,const char** paths);
+/* get char*/
+void veiwer_set_char_callback(GLFWwindow* window,unsigned int );
+
+void viewer_set_callback(GLFWwindow* window);
+
+
+
+
 /*
 glfwSetDropCallback(window, drop_callback);
 

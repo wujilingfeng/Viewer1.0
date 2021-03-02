@@ -278,6 +278,11 @@ void viewer_drop_callback(GLFWwindow* window,int count,const char** paths)
     free_node(id);
     return;
 }
+
+void veiwer_set_char_callback(GLFWwindow* window,unsigned int codepoint)
+{
+    printf("%u \n",codepoint);
+}
 void viewer_set_callback(GLFWwindow* window)
 {
     glfwSetMouseButtonCallback(window,viewer_mouse_button_callback);
@@ -286,4 +291,5 @@ void viewer_set_callback(GLFWwindow* window)
     glfwSetFramebufferSizeCallback(window,viewer_framebuffer_size_callback);
     glfwSetScrollCallback(window,viewer_scroll_callback);
     glfwSetDropCallback(window,viewer_drop_callback);
+    glfwSetCharCallback(window,veiwer_set_char_callback);
 }
