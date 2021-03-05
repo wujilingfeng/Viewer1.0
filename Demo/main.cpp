@@ -264,7 +264,7 @@ void test1()
     Viewer_World_init(&vw);
     vw.print_self(&vw);
     Viewer_Opengl_Interpreter voi;
-    Viewer_Opengl_Interpreter_init(&voi);
+    viewer_opengl_interpreter_init(&voi);
     voi.world=&vw;
     char* p_v=(char*)malloc(sizeof(char)*60);
     memset(p_v,0,sizeof(char)*60);
@@ -333,6 +333,7 @@ void test2()
     mi->cursor_position_callback=viewer_Arcroll_cursor_position_callback;
     mi->scroll_callback=viewer_Arcroll_scroll_callback;
     mi->mouse_button_callback=viewer_Arcroll_mouse_button_callback;
+    mi->key_callback=viewer_Arcroll_key_callback;
     free_node(n);
 
     n=vw.create_something(&vw,intera);
@@ -529,7 +530,7 @@ void test2()
     vw.print_self(&vw);
 
     Viewer_Opengl_Interpreter voi;
-    Viewer_Opengl_Interpreter_initd(&voi,&vw);
+    viewer_opengl_interpreter_initd(&voi,&vw);
   
     upd->voi=&voi;
     //voi.world=&vw;
@@ -565,7 +566,7 @@ void test_frambuffer()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     Viewer_oisp* voisp=(Viewer_oisp*)malloc(sizeof(Viewer_oisp));
     
-    Viewer_Opengl_Interpreter_Shader_Program_init(voisp);
+    viewer_opengl_interpreter_shader_program_init(voisp);
     char* p_v=(char*)malloc(sizeof(char)*120);
     memset(p_v,0,sizeof(char)*120);
     strcat(strcat(p_v,MESH_VIEWER_PATH),"/render1.vert");
@@ -743,7 +744,7 @@ void test_frambuffer()
 
     Viewer_oisp* voisp1=(Viewer_oisp*)malloc(sizeof(Viewer_oisp));
     
-    Viewer_Opengl_Interpreter_Shader_Program_init(voisp1);
+    viewer_opengl_interpreter_shader_program_init(voisp1);
     memset(p_v,0,sizeof(char)*120);
     strcat(strcat(p_v,MESH_VIEWER_PATH),"/quad.vert");
     memset(p_f,0,sizeof(char)*120);

@@ -3,11 +3,11 @@
 #define Viewer_oispp Viewer_Opengl_Interpreter_Shader_Program_Prop
 #define Matrix4x4 Viewer_Matrix4x4_
 
-static struct Viewer_oisp* Viewer_create_shader_program(Viewer_Opengl_Interpreter* voi,char*s1,char*s2,void(*load_data)(struct Viewer_oisp*),void(*render)(struct Viewer_oisp*),Viewer_World* vw)
+struct Viewer_oisp* Viewer_create_shader_program(Viewer_Opengl_Interpreter* voi,char*s1,char*s2,void(*load_data)(struct Viewer_oisp*),void(*render)(struct Viewer_oisp*),Viewer_World* vw)
 {
 	Viewer_oisp* voisp=(Viewer_oisp*)malloc(sizeof(Viewer_oisp));
 	
-	Viewer_Opengl_Interpreter_Shader_Program_init(voisp);
+	viewer_opengl_interpreter_shader_program_init(voisp);
 	char* p_v=(char*)malloc(sizeof(char)*120);
     	memset(p_v,0,sizeof(char)*120);
     	strcat(p_v,s1);
@@ -29,8 +29,7 @@ static struct Viewer_oisp* Viewer_create_shader_program(Viewer_Opengl_Interprete
 	return voisp;
 	
 }
-
-static void Viewer_Interpreter_update_data(Viewer_Opengl_Interpreter* voi)
+void Viewer_Interpreter_update_data(Viewer_Opengl_Interpreter* voi)
 {
         for(Node* it=node_reverse(voi->user_shader_program);it!=NULL;it=(Node*)(it->Prev))
         {
@@ -41,51 +40,12 @@ static void Viewer_Interpreter_update_data(Viewer_Opengl_Interpreter* voi)
 
 }
 
-void Viewer_Opengl_Interpreter_init(Viewer_Opengl_Interpreter*moi)
+
+
+
+void viewer_opengl_interpreter_initd(Viewer_Opengl_Interpreter*voi,Viewer_World*vw )
 {
-    moi->world=NULL;
-  /*  char* p_v=(char*)malloc(sizeof(char)*60);
-    memset(p_v,0,sizeof(char)*60);
-    strcat(strcat(p_v,MESH_VIEWER_PATH),"/mesh.vert");
-    char* p_f=(char*)malloc(sizeof(char)*60);
-    memset(p_f,0,sizeof(char)*60);
-    strcat(strcat(p_f,MESH_VIEWER_PATH),"/mesh.frag");
-    moi->shaders=(ShaderInfo*)malloc(sizeof(ShaderInfo)*3);
-    moi->shaders[0].type=GL_VERTEX_SHADER;
-    moi->shaders[0].filename=p_v;
-    moi->shaders[1].type=GL_FRAGMENT_SHADER;
-    moi->shaders[1].filename=p_f;
-    moi->shaders[2].type=GL_NONE;
-    moi->shaders[2].filename=NULL;*/
-    moi->interpreter=Viewer_Opengl_Interpreter_interpreter;
-      moi->update_data=Viewer_Interpreter_update_data;
-    moi->user_shader_program=NULL;
-	moi->create_shader_program=Viewer_create_shader_program;
-   /* char* p_v=(char*)malloc(sizeof(char)*120);
-    memset(p_v,0,sizeof(char)*120);
-    strcat(strcat(p_v,MESH_VIEWER_PATH),"/mesh.vert");
-    char* p_f=(char*)malloc(sizeof(char)*120);
-    memset(p_f,0,sizeof(char)*120);
-    strcat(strcat(p_f,MESH_VIEWER_PATH),"/mesh.frag");
-    moi->create_shader_program(moi,p_v,p_f,Viewer_default_load_data,Viewer_default_render);
-    memset(p_v,0,sizeof(char)*120);
-    strcat(strcat(p_v,MESH_VIEWER_PATH),"/ui.vert");
-    memset(p_f,0,sizeof(char)*120);
-    strcat(strcat(p_f,MESH_VIEWER_PATH),"/ui.frag");
-    moi->create_shader_program(moi,p_v,p_f,load_data2,render2);
-    free(p_v);free(p_f);
-    */
-    //moi->s_e=0;
-    moi->update=0;
-    moi->prop=NULL;	
-}
-
-
-
-
-void Viewer_Opengl_Interpreter_initd(Viewer_Opengl_Interpreter*voi,Viewer_World*vw )
-{
-    Viewer_Opengl_Interpreter_init(voi);
+    viewer_opengl_interpreter_init(voi);
     voi->world=vw;
     char* p_v=(char*)malloc(sizeof(char)*120);
     memset(p_v,0,sizeof(char)*120);
@@ -96,7 +56,7 @@ void Viewer_Opengl_Interpreter_initd(Viewer_Opengl_Interpreter*voi,Viewer_World*
     Viewer_oisp* voisp= voi->create_shader_program(voi,p_v,p_f,Viewer_default_load_data,Viewer_default_render,vw);
 
     Viewer_oispp* voispp=(Viewer_oispp*)malloc(sizeof(Viewer_oispp));
-    Viewer_Opengl_Interpreter_Shader_Program_Prop_init(voispp);
+    viewer_opengl_interpreter_shader_program_prop_init(voispp);
     voisp->prop=voispp;
 
 

@@ -1,5 +1,5 @@
 #include<Viewer_World_Manager/Viewer_Base_Species.h>
-#include<time.h>
+
 #define Matrix4x4 Viewer_Matrix4x4_
 
 #define out_product LB_three_out_product
@@ -14,42 +14,9 @@ static void Viewer_set_v_one_color(float *v,unsigned int rows,float *c)
 		}
 	}
 }
-void Viewer_Something_init(Viewer_Something*ms)
-{
-	//gldeletevertexarray
-	//gldeletebuffer
-	time_t timep;
-    struct tm *p;
-    time(&timep);
-    p = localtime(&timep); 
-  //  printf ("%d%d%d ", (1900+p->tm_year), (1+p->tm_mon), p->tm_mday);
- //   printf("%d:%d:%d\n", p->tm_hour, p->tm_min, p->tm_sec);
-    ms->create_date=p->tm_sec+p->tm_min*100+p->tm_hour*10000+p->tm_mday*1000000+(1+p->tm_mon)*100000000;
-   // printf("create_date:%d\n",ms->create_date);
-	ms->name=0;
-	ms->name_id=-1;
-	ms->id=-1;
-	//ms->create_date=-1;
-	ms->disappear=0;
-	memset(ms->viewport,0,sizeof(int)*4);
-	ms->marked_element=-1;
-	ms->mesh=NULL;
-	//ms->history_avatar=NULL;
-	ms->evolution=0;
-	ms->prop=NULL;
-}
 
-void Viewer_Texture_init(Viewer_Texture*mt)
-{
-	mt->image_file=NULL;
-	mt->width=0;
-	mt->height=0;
-	mt->n=0;
-	mt->data=NULL;
-	mt->each_face_texture_coord=0;
-	mt->tex=0;
-	mt->prop=NULL;
-}
+
+
 void Viewer_Faces_set_color(Viewer_Faces*mf,float*c)
 {
 
@@ -83,7 +50,7 @@ void Viewer_Faces_random_color(Viewer_Faces*mf)
     }
 
 }
-static void Viewer_Edges_random_color(Viewer_Edges*me)
+void Viewer_Edges_random_color(Viewer_Edges*me)
 {
 	if(me->color_rows<=0)
 	{
@@ -177,55 +144,10 @@ void Viewer_Faces_compute_normal(Viewer_Faces*mf)
 
 
 }
-void Viewer_Faces_init(Viewer_Faces* mf)
-{
-    mf->Data=0;mf->color=0;
-    mf->Data_index=0;
-    mf->normal=0;
-    mf->marked_faces_index=0;
-   
-    mf->evolution=0;
-    mf->Data_index_rows=0;
-  	mf->color_rows=0;
-	mf->normal_rows=0;
-    mf->Data_rows=0;
-	mf->compute_normal=Viewer_Faces_compute_normal;
-    mf->random_color=Viewer_Faces_random_color;
-	mf->set_color=Viewer_Faces_set_color;
-	mf->texture=0;
-	mf->mat=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-	Matrix4x4_init_float(mf->mat);
-	mf->is_reversal_normal=0;
-	mf->is_transparent=0;
-
-    mf->triangle_coordinate[0]=1;mf->triangle_coordinate[1]=0;mf->triangle_coordinate[2]=0;   
- 	mf->prop=NULL;
-
-    //
-    mf->VAO=0;mf->Buffers=NULL;
-   // mf->texture=(Mesh_viewer_texture*)malloc(sizeof(Mesh_viewer_texture));
-   // Mesh_viewer_texture_init(mf->texture);
-
-}
-
-void Viewer_Camera_init(Viewer_Camera*mc)
-{
-    mc->matrix=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-    Matrix4x4_init_float(mc->matrix); 
-    //mc->matrix_inverse=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-    //Matrix4x4_init_float(mc->matrix_inverse);
-	mc->Proj=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-	Matrix4x4_init_float(mc->Proj);
-    mc->prop=0;
-    mc->is_using=0;
-    mc->focal_distance=1;
-    float* data=(float*)(mc->matrix->data);
-    data[2*4+3]=-5;
-    mc->matrix_inverse=mc->matrix->inverse(mc->matrix);
 
 
-}
-static void Viewer_Points_random_color(struct Viewer_Points* mp)
+
+void Viewer_Points_random_color(struct Viewer_Points* mp)
 {
     if(mp->Data_rows<=0)
     {
@@ -253,7 +175,7 @@ static void Viewer_Points_random_color(struct Viewer_Points* mp)
     }
     Viewer_set_v_one_color(mp->color,mp->color_rows,c);
 }*/
-static void Viewer_Points_set_color(Viewer_Points*vp,float*c)
+void Viewer_Points_set_color(Viewer_Points*vp,float*c)
 {
     if(vp->Data_rows<=0)
     {
@@ -271,46 +193,9 @@ static void Viewer_Points_set_color(Viewer_Points*vp,float*c)
     Viewer_set_v_one_color(vp->color,vp->Data_rows,c);
 
 }
-void Viewer_Points_init(struct Viewer_Points* mp)
-{
-    mp->Data=0;mp->color=NULL;
-    
-   
-    mp->prop=NULL;
-    mp->evolution=NULL;
-    mp->set_color=Viewer_Points_set_color;
-    mp->random_color=Viewer_Points_random_color;
-    mp->Data_rows=0; 
 
- //   mp->color_rows=0;
-//
-	mp->mat=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-    Matrix4x4_init_float(mp->mat);
-	mp->pointsize=3.0;
 
-    ///
-    mp->VAO=0;mp->Buffers=NULL;
-	
-}
 
-void Viewer_Edges_init(struct Viewer_Edges* me)
-{
-    me->Data=NULL;me->color=0;
-    me->Data_index=0;
-   
-    me->prop=0;
-    me->evolution=0;
-    me->Data_index_rows=0;
-    me->Data_rows=0;
-	me->color_rows=0;
-	me->mat=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-	me->set_color=Viewer_Edges_set_color;
-	me->random_color=Viewer_Edges_random_color;
-    Matrix4x4_init_float(me->mat);
-	me->edgesize=2.0;
-//
-     me->VAO=0;  me->Buffers=NULL;
-}
 void Viewer_Edges_set_color(Viewer_Edges*me,float*v)
 {
 	if(me->color!=0)
@@ -323,29 +208,7 @@ void Viewer_Edges_set_color(Viewer_Edges*me,float*v)
 	}
 	Viewer_set_v_one_color(me->color,me->color_rows,v);
 }
-void Viewer_Cursor_Shape_init(struct Viewer_Cursor_Shape* vcs)
-{
-    vcs->shape_name=NULL;
-    vcs->image_path=NULL;
-    vcs->is_using=0;
-    vcs->obj=NULL;
-    vcs->prop=NULL;  
-}
-void Viewer_Texts_init(struct Viewer_Texts*vtext )
-{
-    vtext->str=NULL;
-    vtext->xy[0]=0;vtext->xy[1]=0;
-    vtext->scale=1;
-   // vtext->color[0]=0;vtext->color[1]=0;vtext->color[2]=0,vtext->color[3]=1;
-    vtext->font_path=NULL;
-    vtext->mat=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-    Matrix4x4_init_float(vtext->mat);
-    vtext->Proj=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-    Matrix4x4_init_float(vtext->Proj);
 
-    vtext->VAO=0;vtext->VBO[0]=0;vtext->VBO[1]=0;vtext->VBO[2]=0;
-    vtext->prop=NULL;vtext->prop1=NULL;
-}
 /*special function*/
 void Viewer_Texts_initn(struct Viewer_Texts* vtext,char const *str,float x,float y,float s,float* c,char const *font_path)
 {
@@ -400,39 +263,7 @@ void Viewer_Texts_initn(struct Viewer_Texts* vtext,char const *str,float x,float
     } 
     vtext->prop=NULL;vtext->prop1=NULL;
 }
-void Viewer_UI_Mesh_init(Viewer_UI_Mesh* vum)
-{
-    vum->Data=NULL;vum->color=NULL;
-    vum->Data_index=NULL;
 
-    vum->marked_faces_index=NULL;
-   
-    vum->evolution=NULL;
-    vum->Data_index_rows=0;
-    vum->color_rows=0;
-    vum->Data_rows=0;
-    vum->random_color=Viewer_UI_Mesh_random_color;
-    vum->set_color=Viewer_UI_Mesh_set_color;
-    vum->mat=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-    Matrix4x4_init_float(vum->mat);
-    vum->Proj=(Matrix4x4*)malloc(sizeof(Matrix4x4));
-    Matrix4x4_init_float(vum->Proj);
-    vum->prop=NULL;
-    vum->disappear=0;
-    vum->is_transparent=0;
-    vum->texture=NULL;vum->intera=NULL;
-    vum->update=0;
-    vum->VAO=0;vum->Buffers=NULL;
-    /*mf->compute_normal=Viewer_Faces_compute_normal;
-    mf->random_color=Viewer_Faces_random_color;
-    
-    mf->is_reversal_normal=0;
-    mf->is_transparent=0;
-
-    mf->triangle_coordinate[0]=1;mf->triangle_coordinate[1]=0;mf->triangle_coordinate[2]=0;   
-    //
-*/
-}
 void Viewer_UI_Mesh_set_color(Viewer_UI_Mesh* vum,float * c)
 {
 

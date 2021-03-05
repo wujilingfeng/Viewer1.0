@@ -27,11 +27,26 @@ Matrix4x4 *Matrix4x4_get_transpose_##typevalue(Matrix4x4* );\
 void Matrix4x4_transpose_##typevalue(Matrix4x4 *);\
 Matrix4x4 *Matrix4x4_inverse_##typevalue(Matrix4x4 *);\
 void Matrix4x4_identity_##typevalue(Matrix4x4 *);\
-void Matrix4X4_zero_##typevalue(Matrix4x4 *);\
+void Matrix4x4_zero_##typevalue(Matrix4x4 *);\
 void Matrix4x4_printf_##typevalue(Matrix4x4 *);\
-void Matrix4x4_init_##typevalue(Matrix4x4 *);\
 void* Matrix4x4_det_##typevalue(Matrix4x4 *);\
 void  Matrix4x4_copy_data_##typevalue(Matrix4x4 *,Matrix4x4 *);\
+static inline void Matrix4x4_init_##typevalue(Matrix4x4 *a)\
+{\
+    a->mult=Matrix4x4_mult_##typevalue;\
+    a->transpose=Matrix4x4_transpose_##typevalue;\
+    a->inverse=Matrix4x4_inverse_##typevalue;\
+    a->identity=Matrix4x4_identity_##typevalue;\
+    a->print_self=Matrix4x4_printf_##typevalue;\
+    a->det=Matrix4x4_det_##typevalue;    \
+    a->data=malloc(sizeof(typevalue)*16);\
+    a->zero=Matrix4x4_zero_##typevalue;\
+    a->copy_data=Matrix4x4_copy_data_##typevalue;\
+    Matrix4x4_identity_##typevalue(a);\
+    a->prop=0;\
+}\
+
+
 
 #define viewer_Matrix4x4_func(typevalue) Matrix4x4 * Matrix4x4_mult_##typevalue (Matrix4x4 *a,Matrix4x4 *b)\
 { \
@@ -232,20 +247,8 @@ void Matrix4x4_copy_data_##typevalue(Matrix4x4 *a,Matrix4x4 *b)\
 	}\
 	\
 }\
-void Matrix4x4_init_##typevalue(Matrix4x4 *a)\
-{\
-    a->mult=Matrix4x4_mult_##typevalue;\
-    a->transpose=Matrix4x4_transpose_##typevalue;\
-    a->inverse=Matrix4x4_inverse_##typevalue;\
-    a->identity=Matrix4x4_identity_##typevalue;\
-    a->print_self=Matrix4x4_printf_##typevalue;\
-    a->det=Matrix4x4_det_##typevalue;    \
-    a->data=malloc(sizeof(typevalue)*16);\
-    a->zero=Matrix4x4_zero_##typevalue;\
-	a->copy_data=Matrix4x4_copy_data_##typevalue;\
-    Matrix4x4_identity_##typevalue(a);\
-	a->prop=0;\
-}\
+
+
 
 viewer_Matrix4x4_func_declare(double)
 viewer_Matrix4x4_func_declare(float)

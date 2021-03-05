@@ -5,7 +5,7 @@ int main()
     Viewer_World vw;
     Viewer_World_init(&vw);
     Viewer_Opengl_Interpreter voi;
-    Viewer_Opengl_Interpreter_initd(&voi,&vw);
+    viewer_opengl_interpreter_initd(&voi,&vw);
     voi.interpreter(&voi);
 
     return 0;

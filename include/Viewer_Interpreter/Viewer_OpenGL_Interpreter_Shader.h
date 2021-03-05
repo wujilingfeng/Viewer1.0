@@ -25,15 +25,29 @@ typedef struct Viewer_FrameBuffer{
     GLuint rbo;
     void* prop;
 }Viewer_FrameBuffer;
-
-void Viewer_FrameBuffer_init(Viewer_FrameBuffer* vfb);
+static inline void viewer_framebuffer_init(Viewer_FrameBuffer* vfb)
+{
+        vfb->framebuffer=0;
+        vfb->colortex=0;
+        vfb->rbo=0;
+        vfb->prop=NULL;
+}
+//void Viewer_FrameBuffer_init(Viewer_FrameBuffer* vfb);
 typedef struct Viewer_Opengl_Interpreter_Shader_Program_Prop{
 
     Viewer_FrameBuffer vfb1,vfb2;
     unsigned int num;
     void* prop;
 }Viewer_Opengl_Interpreter_Shader_Program_Prop;
-void Viewer_Opengl_Interpreter_Shader_Program_Prop_init(Viewer_oispp*voispp );
+
+static inline void viewer_opengl_interpreter_shader_program_prop_init(Viewer_oispp*voispp )
+{
+    viewer_framebuffer_init(&(voispp->vfb1));
+    viewer_framebuffer_init(&(voispp->vfb2));
+    voispp->num=0;
+}
+
+//void Viewer_Opengl_Interpreter_Shader_Program_Prop_init(Viewer_oispp*voispp );
 typedef struct Viewer_Opengl_Interpreter_Shader_Program
 {
     ShaderInfo* shaders;
@@ -51,7 +65,24 @@ typedef struct Viewer_Opengl_Interpreter_Shader_Program
 }Viewer_Opengl_Interpreter_Shader_Program;
 
 
-void Viewer_Opengl_Interpreter_Shader_Program_init(Viewer_Opengl_Interpreter_Shader_Program*);
+static inline void viewer_opengl_interpreter_shader_program_init(Viewer_Opengl_Interpreter_Shader_Program*voisp)
+{
+    voisp->shaders=(ShaderInfo*)malloc(sizeof(ShaderInfo)*3);;
+    voisp->program=0;
+    voisp->load_data=NULL;
+    voisp->render=NULL;
+    voisp->VAO=NULL;
+    voisp->Buffers=NULL;
+    voisp->tex=NULL;
+    voisp->vw=NULL;
+    voisp->vfb=(Viewer_FrameBuffer*)malloc(sizeof(Viewer_FrameBuffer));
+    viewer_framebuffer_init(voisp->vfb);
+   // Viewer_FrameBuffer_init((voisp->vfb));
+
+    //voisp->voi=NULL;
+    voisp->prop=NULL;
+}
+//void Viewer_Opengl_Interpreter_Shader_Program_init(Viewer_Opengl_Interpreter_Shader_Program*);
 GLuint* test_add_array_to_shader(Viewer_oisp* voisp);
 
 

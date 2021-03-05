@@ -219,4 +219,13 @@ void viewer_Arcroll_mouse_button_callback(Viewer_Intera* mi)
     }
     
 }
+
+void viewer_Arcroll_key_callback(Viewer_Intera*vi)
+{
+    Interactor_GlobalInfo* g_info=vi->g_info;
+    if(g_info->key_action==VIEWER_PRESS)
+    {
+        printf("key:%d\n",g_info->key );
+    }
+}
 #undef Matrix4x4
