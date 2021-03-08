@@ -84,7 +84,7 @@ void viewer_Arcroll_scroll_callback(Viewer_Intera*mi,double x,double y)
         free_node(names_id);
         rbt1=(RB_int*)vw->species2somethings->find(vw->species2somethings,&rbt);
         RB_Tree* tree=NULL;
-        RB_Trav* iter1=NULL;
+        RB_Tree_Trav* iter1=NULL;
         if(rbt1!=NULL)
         {
             tree=((RB_Tree*)(rbt1->value));

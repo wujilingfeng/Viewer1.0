@@ -17,40 +17,8 @@
 	}
 
 }*/
-void Viewer_World_init(struct Viewer_World*m)
-{
-	//m->things_id=0;
-	//char str[]="points,edges,faces";
-	m->species_id=0;
-	m->species2somethings=(RB_Tree*)malloc(sizeof(RB_Tree));
-	RB_Tree_init_int(m->species2somethings);
-	m->species_name_registe=(RB_Tree*)malloc(sizeof(RB_Tree));
-	RB_Tree_init_int(m->species_name_registe);
-	m->something_id=(RB_Tree*)malloc(sizeof(RB_Tree));
-	RB_Tree_init_int(m->something_id);
-    m->g_info=(Interactor_GlobalInfo*)malloc(sizeof(Interactor_GlobalInfo));
-    GlobalInfo_init(m->g_info);
-   char str[]="Points,Edges,Faces,Intera,Camera,Texture,UI_Mesh,Cursor_Shape,Texts";
-	Node* node=Viewer_World_registe(m,str);
-    node=node_reverse(node);
-    free_node_value(node);
-    free_node(node);
- 	m->find_species=Viewer_World_find_species;
-    m->create_something=Viewer_World_create_something;
-    m->remove_something=Viewer_World_remove_something;
-    m->print_self=Viewer_World_printself;
-    m->species_begin=Viewer_World_species_begin; 
-    m->species_end=Viewer_World_species_end;
-    m->registe=Viewer_World_registe;
-    m->background_color[0]=0.2;m->background_color[1]=0.5;m->background_color[2]=1.0;m->background_color[3]=1.0;
-//    strcpy(m->cursor_shape,"VIEWER_ARROW_CURSOR");
 
- 	m->prop=NULL;
-    m->prop1=NULL;
-
-}
-
-Node* Viewer_World_find_species(Viewer_World*mw,char* c)
+Node* viewer_world_find_species(Viewer_World*mw,char* c)
 {
 	if(c==NULL||c[0]=='\0')
 	{
@@ -79,7 +47,7 @@ Node* Viewer_World_find_species(Viewer_World*mw,char* c)
 		int* id=(int *)malloc(sizeof(int));
 		*id=-1;
        		 RB_Tree* tree=mw->species_name_registe;
-		RB_Trav*it=tree->begin(tree);
+		RB_Tree_Trav*it=tree->begin(tree);
 		for(;it->it!=NULL;it->next(it))
 		{
 			if(strcmp(temp_c,(char*)(it->second(it)))==0)
@@ -105,7 +73,7 @@ Node* Viewer_World_find_species(Viewer_World*mw,char* c)
 
 
 
-Node* Viewer_World_registe(Viewer_World*m,char*c)
+Node* viewer_world_find_registe(Viewer_World*m,char*c)
 {
 	if(c==NULL||c[0]=='\0')
 	{return NULL;}
@@ -126,7 +94,7 @@ Node* Viewer_World_registe(Viewer_World*m,char*c)
 		{
 			temp_c[k]=c[i+k];
 		}
-		Node* id=Viewer_World_find_species(m,temp_c);
+		Node* id=viewer_world_find_species(m,temp_c);
 		if(id==NULL)
 		{
 			break;
@@ -147,7 +115,7 @@ Node* Viewer_World_registe(Viewer_World*m,char*c)
 			rbt.value=(void*)temp_c;
 			m->species_name_registe->insert(m->species_name_registe,&rbt);
 			RB_Tree* s_map=(RB_Tree*)malloc(sizeof(RB_Tree));
-			RB_Tree_init_int(s_map);
+			rb_tree_init_int(s_map);
 			rbt.value=(void*)s_map;
 			m->species2somethings->insert(m->species2somethings,&rbt);
 			int *temp_id=(int*)malloc(sizeof(int));
@@ -168,14 +136,14 @@ Node* Viewer_World_registe(Viewer_World*m,char*c)
 	return node_reverse(re);
 }
 
-void Viewer_World_printself(Viewer_World*mw)
+void viewer_world_printself(Viewer_World*mw)
 {
-	RB_Trav* iter=mw->species2somethings->begin(mw->species2somethings);
+	RB_Tree_Trav* iter=mw->species2somethings->begin(mw->species2somethings);
     for(;iter->it!=NULL;iter->next(iter))
     {
         printf("name_id:%d\n",*((int*)(iter->first(iter))));
         RB_Tree* temp=(RB_Tree*)(iter->second(iter));
-        RB_Trav* iter1=temp->begin(temp);
+        RB_Tree_Trav* iter1=temp->begin(temp);
         for(;iter1->it!=NULL;iter1->next(iter1))
         {
             Viewer_Something* vs=(Viewer_Something*)(iter1->second(iter1));
@@ -187,7 +155,7 @@ void Viewer_World_printself(Viewer_World*mw)
 }
 
 
-Node* Viewer_World_from_something_evolute(Node*lis,struct Viewer_World* mw)
+Node* viewer_world_from_something_evolute(Node*lis,struct Viewer_World* mw)
 {
 	Node* re=0;
 	if(lis==0)
@@ -273,9 +241,9 @@ Node* Viewer_World_from_something_evolute(Node*lis,struct Viewer_World* mw)
 	}
 	return node_reverse(re);
 }
-Node* Viewer_World_create_something(struct Viewer_World*mw,char *c)
+Node* viewer_world_create_something(struct Viewer_World*mw,char *c)
 {
-	Node* id_list=Viewer_World_registe(mw,c),*re=0;
+	Node* id_list=viewer_world_find_registe(mw,c),*re=0;
 	Node* iter_n=id_list;
 	if(id_list==NULL)
 	{return NULL;}
@@ -327,7 +295,7 @@ Node* Viewer_World_create_something(struct Viewer_World*mw,char *c)
 	
 
     re=node_reverse(re);
-    Node* temp_node=Viewer_World_from_something_evolute(re,mw);
+    Node* temp_node=viewer_world_from_something_evolute(re,mw);
 	free_node(temp_node);
 	return re;
 }
@@ -335,7 +303,7 @@ Node* Viewer_World_create_something(struct Viewer_World*mw,char *c)
 
 //
 
-void Viewer_World_remove_something(struct Viewer_World* mw,Viewer_Something* ms)
+void viewer_world_remove_something(struct Viewer_World* mw,Viewer_Something* ms)
 {
     RB_int rbt,*rbt1;
     rbt.key=ms->name_id;
@@ -349,10 +317,10 @@ void Viewer_World_remove_something(struct Viewer_World* mw,Viewer_Something* ms)
         //rbt1=(RB_int*)(tree->find(tree,&rbt)) 
     }
 }
-RB_Trav Viewer_World_species_begin(struct Viewer_World*vw,char * name)
+RB_Tree_Trav viewer_world_species_begin(struct Viewer_World*vw,char * name)
 {
-    RB_Trav re;
-    RB_Trav_init(&re);
+    RB_Tree_Trav re;
+    rb_tree_trav_init(&re);
     Node* names_id=vw->find_species(vw,name);
     RB_int rbt,*rbt1=NULL;
     rbt.key=*((int*)(names_id->value));
@@ -361,7 +329,7 @@ RB_Trav Viewer_World_species_begin(struct Viewer_World*vw,char * name)
 
     rbt1=(RB_int*)vw->species2somethings->find(vw->species2somethings,&rbt);
     RB_Tree* tree=NULL;
-    RB_Trav* iter1=NULL;
+    RB_Tree_Trav* iter1=NULL;
     if(rbt1!=NULL)
     {
         tree=((RB_Tree*)(rbt1->value));
@@ -371,10 +339,10 @@ RB_Trav Viewer_World_species_begin(struct Viewer_World*vw,char * name)
     }
     return re;
 }
-RB_Trav Viewer_World_species_end(struct Viewer_World* vw,char* name)
+RB_Tree_Trav viewer_world_species_end(struct Viewer_World* vw,char* name)
 {
-   RB_Trav re;
-   RB_Trav_init(&re);
+   RB_Tree_Trav re;
+   rb_tree_trav_init(&re);
    return re;
 }
 /*void Mesh_viewer_add_face_data(Mesh_viewer_faces*mf,float* v,int v_cols,int v_rows,int *index,int i_cols,int i_rows,float *color )

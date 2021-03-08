@@ -34,7 +34,7 @@ void viewer_cursor_position_callback(GLFWwindow* window,double x,double y)
 	rbt.key=*((int*)(id->value));
     RB_int *rbt1=(RB_int*)mw->species2somethings->find(mw->species2somethings,&rbt);
 	RB_Tree* tree=NULL;
-    RB_Trav* iter1=NULL;
+    RB_Tree_Trav* iter1=NULL;
     if(rbt1!=NULL)
     {
 	    tree=(RB_Tree*)(rbt1->value);
@@ -79,7 +79,7 @@ void viewer_mouse_button_callback(GLFWwindow* window,int button,int action,int m
 	rbt.key=*((int*)(id->value));
 	rbt1=mw->species2somethings->find(mw->species2somethings,&rbt);
 	RB_Tree *tree=NULL;
-    RB_Trav* iter1=NULL;
+    RB_Tree_Trav* iter1=NULL;
     if(rbt1!=NULL)
     {
         tree=(RB_Tree*)(rbt1->value);
@@ -120,7 +120,7 @@ void viewer_framebuffer_size_callback(GLFWwindow* window,int w,int h)
 	rbt.key=*((int*)(id->value));
 	rbt1=mw->species2somethings->find(mw->species2somethings,&rbt);
 	RB_Tree* tree=(RB_Tree*)(rbt1->value);
-  	RB_Trav* iter1=tree->rbegin(tree);
+  	RB_Tree_Trav* iter1=tree->rbegin(tree);
     for(;iter1->it!=NULL;iter1->prev(iter1))
     {
 		Viewer_Something* vs=(Viewer_Something*)(iter1->second(iter1));
@@ -164,7 +164,7 @@ void viewer_key_callback(GLFWwindow* window,int key,int scancode,int action,int 
 	
 	rbt1=mw->species2somethings->find(mw->species2somethings,&rbt);
 	RB_Tree* tree=(RB_Tree*)(rbt1->value);
-	RB_Trav* iter1=tree->rbegin(tree);
+	RB_Tree_Trav* iter1=tree->rbegin(tree);
 
     for(;iter1->it!=NULL;iter1->prev(iter1))
     {
@@ -203,7 +203,7 @@ void viewer_scroll_callback(GLFWwindow* window,double x,double y)
 	
 	rbt1=mw->species2somethings->find(mw->species2somethings,&rbt);
 	RB_Tree* tree=(RB_Tree*)(rbt1->value);
-	RB_Trav* iter1=tree->rbegin(tree);
+	RB_Tree_Trav* iter1=tree->rbegin(tree);
     for(;iter1->it!=NULL;iter1->prev(iter1))
     {
 		Viewer_Something* vs=(Viewer_Something*)(iter1->second(iter1));
@@ -258,7 +258,7 @@ void viewer_drop_callback(GLFWwindow* window,int count,const char** paths)
     
     rbt1=mw->species2somethings->find(mw->species2somethings,&rbt);
     RB_Tree* tree=(RB_Tree*)(rbt1->value);
-    RB_Trav* iter1=tree->rbegin(tree);
+    RB_Tree_Trav* iter1=tree->rbegin(tree);
     for(;iter1->it!=NULL;iter1->prev(iter1))
     {
         Viewer_Something* vs=(Viewer_Something*)(iter1->second(iter1));

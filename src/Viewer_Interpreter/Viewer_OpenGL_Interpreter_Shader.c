@@ -16,7 +16,7 @@ GLuint* test_add_array_to_shader(Viewer_oisp* voisp)
     rbt.key=*((int*)(names_id->value));
     rbt1=(RB_int*)mw->species2somethings->find(mw->species2somethings,&rbt);
     RB_Tree* tree;
-    RB_Trav* iter1;
+    RB_Tree_Trav* iter1;
 
     if(rbt1!=NULL)
     {
@@ -128,7 +128,7 @@ static void Viewer_default_init_uniform(Viewer_oisp*voisp)
     rbt.key=*((int*)(id->value));
     rbt1=(RB_int*)mw->species2somethings->find(mw->species2somethings,&rbt);
     RB_Tree* tree;
-    RB_Trav* iter1;
+    RB_Tree_Trav* iter1;
     if(rbt1!=NULL)
     {
         tree=(RB_Tree*)(rbt1->value);
@@ -198,7 +198,7 @@ static void Viewer_default_set_uniform(Viewer_oisp*voisp)
     rbt.key=*((int*)(id->value));
     rbt1=(RB_int*)mw->species2somethings->find(mw->species2somethings,&rbt);
     RB_Tree* tree;
-    RB_Trav* iter1;
+    RB_Tree_Trav* iter1;
     if(rbt1!=NULL)
     {
         tree=(RB_Tree*)(rbt1->value);
@@ -291,7 +291,7 @@ void Viewer_default_load_data(Viewer_oisp* voisp)
     rbt.key=*((int*)(names_id->value));
     rbt1=(RB_int*)mw->species2somethings->find(mw->species2somethings,&rbt);
     RB_Tree* tree=NULL;
-    RB_Trav*iter1=NULL;
+    RB_Tree_Trav*iter1=NULL;
     if(rbt1!=NULL)
     {
         tree=(RB_Tree*)(rbt1->value);       
@@ -842,7 +842,7 @@ static void Viewer_Opengl_Interpreter_set_cursor(Viewer_World* vw)
     rbt.key=*((int*)(names_id->value));
     rbt1=(RB_int*)vw->species2somethings->find(vw->species2somethings,&rbt);
     RB_Tree* tree=NULL;
-    RB_Trav*iter1=NULL;
+    RB_Tree_Trav*iter1=NULL;
     if(rbt1!=NULL)
     {
         tree=(RB_Tree*)(rbt1->value);
@@ -911,7 +911,7 @@ void Viewer_default_render(Viewer_oisp* voisp)
         rbt.key=*((int*)(names_id->value));
         rbt1=mw->species2somethings->find(mw->species2somethings,&rbt);
         RB_Tree* tree=NULL;
-        RB_Trav* iter1=NULL;
+        RB_Tree_Trav* iter1=NULL;
         if(rbt1!=NULL)
         {
             tree=(RB_Tree*)(rbt1->value);
@@ -1074,7 +1074,7 @@ void Viewer_default_render(Viewer_oisp* voisp)
     // rbt.key=*((int*)(names_id->value));
     // rbt1=mw->species2somethings->find(mw->species2somethings,&rbt);
     // RB_Tree* tree=NULL;
-    // RB_Trav* iter1=NULL;
+    // RB_Tree_Trav* iter1=NULL;
     // if(rbt1!=NULL)
     // {
     //     tree=(RB_Tree*)(rbt1->value);
@@ -1354,19 +1354,19 @@ void Viewer_load_ui_data(Viewer_Opengl_Interpreter_Shader_Program *voisp)
 /**
  
 */ 
-    // for(RB_Trav iter1=vw->species_begin(vw,"Points");iter1.it!=NULL;iter1.next(&iter1))
+    // for(RB_Tree_Trav iter1=vw->species_begin(vw,"Points");iter1.it!=NULL;iter1.next(&iter1))
     // {
     //     Viewer_Something* vs=(Viewer_Something*)(iter1.second(&iter1));
     //     Viewer_Points* vp=(Viewer_Points*)(vs->evolution);
     //     elements_id+=vp->Data_rows;
     // }
-    // for(RB_Trav iter1=vw->species_begin(vw,"Edges");iter1.it!=NULL;iter1.next(&iter1))
+    // for(RB_Tree_Trav iter1=vw->species_begin(vw,"Edges");iter1.it!=NULL;iter1.next(&iter1))
     // {
     //     Viewer_Something* vs=(Viewer_Something*)(iter1.second(&iter1));
     //     Viewer_Edges* ve=(Viewer_Edges*)(vs->evolution);
     //     elements_id+=ve->Data_index_rows;
     // }
-    // for(RB_Trav iter1=vw->species_begin(vw,"Faces");iter1.it!=NULL;iter1.next(&iter1))
+    // for(RB_Tree_Trav iter1=vw->species_begin(vw,"Faces");iter1.it!=NULL;iter1.next(&iter1))
     // {
     //     Viewer_Something* vs=(Viewer_Something*)(iter1.second(&iter1));
     //     Viewer_Faces* vf=(Viewer_Faces*)(vs->evolution);
@@ -1382,7 +1382,7 @@ void Viewer_load_ui_data(Viewer_Opengl_Interpreter_Shader_Program *voisp)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); 
     char texts[]="Texts";
     RB_int rbt,*rbt1;
-    RB_Trav *iter1=NULL;
+    RB_Tree_Trav *iter1=NULL;
     RB_Tree *tree=NULL;
     Node* names_id=vw->find_species(vw,texts);
     rbt.key=*((int*)(names_id->value));
@@ -1443,7 +1443,7 @@ void Viewer_load_ui_data(Viewer_Opengl_Interpreter_Shader_Program *voisp)
                 FT_Set_Pixel_Sizes(face,0,48);
             
                 characters=(RB_Tree*)malloc(sizeof(RB_Tree));
-                RB_Tree_init_char(characters);  
+                rb_tree_init_char(characters);  
                 for(unsigned char c=0;c<128;c++)
                 {
                     if(FT_Load_Char(face,c,FT_LOAD_RENDER))
@@ -1772,7 +1772,7 @@ static void viewer_interpreter_decode_pickupinfo(Viewer_World* vw,Interactor_Glo
     unsigned int id=g_info->readpixelcolor[0]*256*256*256+g_info->readpixelcolor[1]*256*256+g_info->readpixelcolor[2]*256+g_info->readpixelcolor[3];
 //  printf("pick num:%d\n",id);
     char points[]="Points";
-    for(RB_Trav iter1=vw->species_begin(vw,points);iter1.it!=NULL;iter1.next(&iter1))
+    for(RB_Tree_Trav iter1=vw->species_begin(vw,points);iter1.it!=NULL;iter1.next(&iter1))
     {
         Viewer_Something* vs=(Viewer_Something*)(iter1.second(&iter1));
         temp_sum=((Viewer_Points*)(vs->evolution))->Data_rows;
@@ -1788,7 +1788,7 @@ static void viewer_interpreter_decode_pickupinfo(Viewer_World* vw,Interactor_Glo
     } 
   
     char edges[]="Edges";
-    for(RB_Trav iter1=vw->species_begin(vw,edges);iter1.it!=NULL;iter1.next(&iter1))
+    for(RB_Tree_Trav iter1=vw->species_begin(vw,edges);iter1.it!=NULL;iter1.next(&iter1))
     {
         Viewer_Something* vs=(Viewer_Something*)(iter1.second(&iter1));
         temp_sum=((Viewer_Edges*)(vs->evolution))->Data_index_rows;
@@ -1803,7 +1803,7 @@ static void viewer_interpreter_decode_pickupinfo(Viewer_World* vw,Interactor_Glo
 
     }
     char faces[]="Faces";
-    for(RB_Trav iter1=vw->species_begin(vw,faces);iter1.it!=NULL;iter1.next(&iter1))
+    for(RB_Tree_Trav iter1=vw->species_begin(vw,faces);iter1.it!=NULL;iter1.next(&iter1))
     {
         Viewer_Something* vs=(Viewer_Something*)(iter1.second(&iter1));
         temp_sum=((Viewer_Faces*)(vs->evolution))->Data_index_rows;
@@ -1817,7 +1817,7 @@ static void viewer_interpreter_decode_pickupinfo(Viewer_World* vw,Interactor_Glo
         sum+=temp_sum;
     } 
     char uimesh[]="UI_Mesh";
-    for(RB_Trav iter1=vw->species_begin(vw,uimesh);iter1.it!=NULL;iter1.next(&iter1))
+    for(RB_Tree_Trav iter1=vw->species_begin(vw,uimesh);iter1.it!=NULL;iter1.next(&iter1))
     {
         Viewer_Something* vs=(Viewer_Something*)(iter1.second(&iter1));
         temp_sum=((Viewer_UI_Mesh*)(vs->evolution))->Data_index_rows;
@@ -1831,7 +1831,7 @@ static void viewer_interpreter_decode_pickupinfo(Viewer_World* vw,Interactor_Glo
         sum+=temp_sum;
     } 
     char texts[]="Texts";
-    for(RB_Trav iter1=vw->species_begin(vw,texts);iter1.it!=NULL;iter1.next(&iter1))
+    for(RB_Tree_Trav iter1=vw->species_begin(vw,texts);iter1.it!=NULL;iter1.next(&iter1))
     {
         Viewer_Something* vs=(Viewer_Something*)(iter1.second(&iter1));
         temp_sum=strlen(((Viewer_Texts*)(vs->evolution))->str);
@@ -1893,7 +1893,7 @@ void Viewer_render_ui(Viewer_Opengl_Interpreter_Shader_Program*voisp)
         rbt.key=*((int*)(names_id->value));
         rbt1=(RB_int*)vw->species2somethings->find(vw->species2somethings,&rbt);
         RB_Tree* tree=NULL;
-        RB_Trav*iter1=NULL;
+        RB_Tree_Trav*iter1=NULL;
         if(rbt1!=NULL)
         {
             tree=(RB_Tree*)(rbt1->value);       

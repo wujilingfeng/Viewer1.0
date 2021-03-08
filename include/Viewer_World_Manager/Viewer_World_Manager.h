@@ -30,29 +30,78 @@ typedef struct Viewer_World{
 	void (*print_self)(struct Viewer_World*);
 	Node* (*find_species)(struct Viewer_World*,char*);
 	Node*(*registe)(struct Viewer_World*,char*);
-	RB_Trav  (* species_begin)(struct Viewer_World*,char*);
-	RB_Trav(*species_end)(struct Viewer_World*,char*);
+	RB_Tree_Trav  (* species_begin)(struct Viewer_World*,char*);
+	RB_Tree_Trav(*species_end)(struct Viewer_World*,char*);
 	float background_color[4];
 	//char cursor_shape[40];	
 	void *prop;
 	void* *prop1;
 }Viewer_World;
-void Viewer_World_init(struct Viewer_World*);
 /*查找物种并返回ids,比如Viewer_World_find_species(vw,"Points,Edges")*/
-Node* Viewer_World_find_species(struct Viewer_World*,char*);
-Node* Viewer_World_registe(struct Viewer_World*,char*);
-Node* Viewer_World_from_something_evolute(Node*,struct Viewer_World*);
-Node* Viewer_World_create_something(struct Viewer_World*,char *);
-void Viewer_World_remove_something(struct Viewer_World*,Viewer_Something*);
-/*Viewer_World_species_begin(vw,"Points")*/
-RB_Trav Viewer_World_species_begin(struct Viewer_World*,char *);
-RB_Trav Viewer_World_species_end(struct Viewer_World* ,char*);
+Node* viewer_world_find_species(struct Viewer_World*,char*);
+Node* viewer_world_find_registe(struct Viewer_World*,char*);
+Node* viewer_world_from_something_evolute(Node*,struct Viewer_World*);
+Node* viewer_world_create_something(struct Viewer_World*,char *);
 
-void Viewer_World_printself(Viewer_World*);
+
+void viewer_world_remove_something(struct Viewer_World*,Viewer_Something*);
+/*viewer_world_species_begin(vw,"Points")*/
+RB_Tree_Trav viewer_world_species_begin(struct Viewer_World*,char *);
+RB_Tree_Trav viewer_world_species_end(struct Viewer_World* ,char*);
+
+void viewer_world_printself(Viewer_World*);
 
 
 //void Mesh_viewer_add_face_data(Mesh_viewer_faces*,double *v,int v_cols,int v_rows,int *index,int i_cols,int i_rows,double *color);
 
+static inline void viewer_world_init(struct Viewer_World*m)
+{
+	//m->things_id=0;
+	//char str[]="points,edges,faces";
+	m->species_id=0;
+	m->species2somethings=(RB_Tree*)malloc(sizeof(RB_Tree));
+	rb_tree_init_int(m->species2somethings);
+	m->species_name_registe=(RB_Tree*)malloc(sizeof(RB_Tree));
+	rb_tree_init_int(m->species_name_registe);
+	m->something_id=(RB_Tree*)malloc(sizeof(RB_Tree));
+	rb_tree_init_int(m->something_id);
+    m->g_info=(Interactor_GlobalInfo*)malloc(sizeof(Interactor_GlobalInfo));
+    GlobalInfo_init(m->g_info);
+   char str[]="Points,Edges,Faces,Intera,Camera,Texture,UI_Mesh,Cursor_Shape,Texts";
+	Node* node=viewer_world_find_registe(m,str);
+    node=node_reverse(node);
+    free_node_value(node);
+    free_node(node);
+ 	m->find_species=viewer_world_find_species;
+    m->create_something=viewer_world_create_something;
+    m->remove_something=viewer_world_remove_something;
+    m->print_self=viewer_world_printself;
+    m->species_begin=viewer_world_species_begin; 
+    m->species_end=viewer_world_species_end;
+    m->registe=viewer_world_find_registe;
+    m->background_color[0]=0.2;m->background_color[1]=0.5;m->background_color[2]=1.0;m->background_color[3]=1.0;
+//    strcpy(m->cursor_shape,"VIEWER_ARROW_CURSOR");
+
+ 	m->prop=NULL;
+    m->prop1=NULL;
+}
+
+typedef struct Viewer_World_Manager{
+	int size;
+	RB_Tree* container;	
+
+}Viewer_World_Manager;
+
+
+
+static inline void viewer_world_manager_init(Viewer_World_Manager*vwm)
+{
+
+	vwm->size=0;
+	vwm->container=(RB_Tree*)malloc(sizeof(RB_Tree));
+	rb_tree_init_int(vwm->container);
+
+}
 
 #ifdef __cplusplus
 }

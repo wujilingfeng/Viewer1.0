@@ -261,7 +261,7 @@ static void render1(Viewer_Opengl_Interpreter_Shader_Program* voisp)
 void test1()
 {
     Viewer_World vw;
-    Viewer_World_init(&vw);
+    viewer_world_init(&vw);
     vw.print_self(&vw);
     Viewer_Opengl_Interpreter voi;
     viewer_opengl_interpreter_init(&voi);
@@ -295,7 +295,7 @@ void test1()
 void test2()
 {
     Viewer_World vw;
-    Viewer_World_init(&vw);
+    viewer_world_init(&vw);
     char camera[]="Camera";
     Node* n=vw.create_something(&vw,camera);
     Viewer_Something*ms=(Viewer_Something*)(n->value);
