@@ -10,7 +10,9 @@ extern "C" {
 typedef struct Matrix4x4{
     struct Matrix4x4 * (*mult)(struct Matrix4x4 *,struct Matrix4x4 *);
     void (*transpose)(struct Matrix4x4 *);
-    struct Matrix4x4 *(*inverse)(struct Matrix4x4 *); 
+    // this Source code is suitable for any dimension
+    struct Matrix4x4 *(*inverse)(struct Matrix4x4 *);
+    // 
     void (*identity)(struct Matrix4x4 *);
     void (*zero)(struct Matrix4x4*);
     void (*print_self)(struct Matrix4x4 *);
@@ -96,27 +98,32 @@ Matrix4x4 *Matrix4x4_inverse_##typevalue(Matrix4x4 *a)\
 {\
     Matrix4x4 *re=(Matrix4x4 *)malloc(sizeof(Matrix4x4));\
     Matrix4x4_init_##typevalue(re);\
-    typevalue data[4][4],data_b[4][4],*data_a=(typevalue*)(a->data);\
-    for(int i=0;i<4;i++)\
+    int dim=4;\
+    typevalue**data_b=(typevalue**)malloc(sizeof(typevalue*)*dim);\
+    typevalue**data=(typevalue**)malloc(sizeof(typevalue*)*dim);\
+    typevalue *data_a=(typevalue*)(a->data);\
+    for(int i=0;i<dim;i++)\
     {\
-        for(int j=0;j<4;j++)\
+        data[i]=(typevalue*)malloc(sizeof(typevalue)*dim);\
+        data_b[i]=(typevalue*)malloc(sizeof(typevalue)*dim);\
+        for(int j=0;j<dim;j++)\
         {\
-            data[i][j]=data_a[4*i+j];\
+            data[i][j]=data_a[dim*i+j];\
             data_b[i][j]=0;\
         }\
         data_b[i][i]=1;\
     }\
-    for(int i=0;i<4;i++)\
+    for(int i=0;i<dim;i++)\
     {\
         int k=i;\
-        for(int j=i;j<4;j++)\
+        for(int j=i;j<dim;j++)\
         {\
             if(SIGN(data[i][j])*data[i][j]>SIGN(data[i][k])*data[i][k])\
             {\
                 k=j;\
             }\
         }\
-        for(int l=0;l<4;l++)\
+        for(int l=0;l<dim;l++)\
         {\
             typevalue temp=data[l][i],temp1=data_b[l][i];\
             data[l][i]=data[l][k];data_b[l][i]=data_b[l][k];\
@@ -125,19 +132,24 @@ Matrix4x4 *Matrix4x4_inverse_##typevalue(Matrix4x4 *a)\
         typevalue temp=data[i][i];\
         if(temp*(SIGN(temp))<=10e-10)\
         {\
-		printf("inverse terminate:%lf\n",temp);\
+		  printf("inverse terminate:%lf\n",temp);\
+            for(int i=0;i<dim;i++)\
+            {\
+                free(data[i]);free(data_b[i]);\
+                free(data);free(data_b);\
+            }\
             Matrix4x4_free(re);\
             return 0;\
         }\
-        for(int j=0;j<4;j++)\
+        for(int j=0;j<dim;j++)\
         {\
             data[j][i]=data[j][i]/temp;\
             data_b[j][i]=data_b[j][i]/temp;\
         }\
-        for(int j=i+1;j<4;j++)\
+        for(int j=i+1;j<dim;j++)\
         {\
             typevalue temp1=data[i][j];\
-            for(int l=0;l<4;l++)\
+            for(int l=i;l<dim;l++)\
             {\
                 data[l][j]-=temp1*data[l][i];\
                 data_b[l][j]-=temp1*data_b[l][i];\
@@ -145,13 +157,13 @@ Matrix4x4 *Matrix4x4_inverse_##typevalue(Matrix4x4 *a)\
             \
         }\
     }\
-    for(int i=0;i<4;i++)\
+    for(int i=0;i<dim;i++)\
     {\
-        int l=3-i;\
+        int l=dim-i-1;\
         for(int j=0;j<l;j++)\
         {\
             typevalue temp=data[l][j];\
-            for(int k=0;k<4;k++)\
+            for(int k=0;k<dim;k++)\
             {\
                 data[k][j]-=temp*data[k][l];\
                 data_b[k][j]-=temp*data_b[k][l];\
@@ -159,13 +171,15 @@ Matrix4x4 *Matrix4x4_inverse_##typevalue(Matrix4x4 *a)\
         }\
     }\
     typevalue *data_c=(typevalue *)(re->data);\
-    for(int i=0;i<4;i++)\
+    for(int i=0;i<dim;i++)\
     {\
-        for(int j=0;j<4;j++)\
+        for(int j=0;j<dim;j++)\
         {\
-            data_c[i*4+j]=data_b[i][j];\
+            data_c[i*dim+j]=data_b[i][j];\
         }\
+        free(data[i]);free(data_b[i]);\
     }\
+    free(data);free(data_b);\
     return re;\
 }\
 void Matrix4x4_identity_##typevalue(Matrix4x4 *a)\
