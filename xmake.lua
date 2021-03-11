@@ -40,7 +40,7 @@ then
                 add_links("cstructures","glfw3", "GL", "Xrandr", "Xi", "X11", "Xxf86vm", "pthread", "Xinerama", "Xcursor", "dl", "freetype", "png", "z", "harfbuzz")
             end
             add_linkdirs("lib","temp_libs")
-            add_ldflags("-no-pie -Wl,--start-group ") 
+            add_ldflags("-no-pie ") 
     end
 end
 
