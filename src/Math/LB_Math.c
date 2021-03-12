@@ -31,6 +31,8 @@ int *pailie_map_i_to_reverse_order(int n)
     }
     return re;
 }
+//Convert the result of the above function
+
 
 int * map_reverse_order_to_pailie(int* r,int n)
 {

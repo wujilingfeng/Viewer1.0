@@ -1,9 +1,6 @@
 {
     depfiles_gcc = "build/.objs/viewer/linux/x86_64/release/src/Math/LB_Math.c.o:  src/Math/LB_Math.c include/Math/LB_Math.h\
 ",
-    files = {
-        "src/Math/LB_Math.c"
-    },
     values = {
         "/usr/bin/gcc",
         {
@@ -17,5 +14,8 @@
             "-Ithirdpart/freetype/include",
             "-DNDEBUG"
         }
+    },
+    files = {
+        "src/Math/LB_Math.c"
     }
 }

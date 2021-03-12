@@ -1,9 +1,6 @@
 {
     depfiles_gcc = "build/.objs/viewer/linux/x86_64/release/thirdpart/glad/src/glad.c.o:  thirdpart/glad/src/glad.c thirdpart/glad/include/glad/glad.h  thirdpart/glad/include/KHR/khrplatform.h\
 ",
-    files = {
-        "thirdpart/glad/src/glad.c"
-    },
     values = {
         "/usr/bin/gcc",
         {
@@ -17,5 +14,8 @@
             "-Ithirdpart/freetype/include",
             "-DNDEBUG"
         }
+    },
+    files = {
+        "thirdpart/glad/src/glad.c"
     }
 }

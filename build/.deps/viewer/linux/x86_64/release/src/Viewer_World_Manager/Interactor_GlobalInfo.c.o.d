@@ -1,9 +1,6 @@
 {
     depfiles_gcc = "build/.objs/viewer/linux/x86_64/release/src/Viewer_World_Manager/Interactor_GlobalInfo.c.o:  src/Viewer_World_Manager/Interactor_GlobalInfo.c  include/Viewer_World_Manager/Interactor_GlobalInfo.h  thirdpart/cstructures/include/tools_node.h\
 ",
-    files = {
-        "src/Viewer_World_Manager/Interactor_GlobalInfo.c"
-    },
     values = {
         "/usr/bin/gcc",
         {
@@ -17,5 +14,8 @@
             "-Ithirdpart/freetype/include",
             "-DNDEBUG"
         }
+    },
+    files = {
+        "src/Viewer_World_Manager/Interactor_GlobalInfo.c"
     }
 }
